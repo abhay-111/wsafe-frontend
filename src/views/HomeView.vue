@@ -1,5 +1,14 @@
 <template>
   <v-container class="text-white fill-height">
+    <v-snackbar v-model="snackbar" :timeout="timeout">
+      {{ errorText }}
+
+      <template v-slot:action="{ attrs }">
+        <v-btn color="blue" v-bind="attrs" @click="snackbar = false">
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
     <v-row class="py-5 px-15">
       <v-col cols="12">
         <div class="d-flex justify-center align-items-center">
@@ -21,44 +30,61 @@
       </v-col>
       <v-col cols="6">
         <div class="pa-5">
-          <v-card class="pa-10" max-width="30rem" max-height="20rem">
+          <v-card class="pa-10" max-width="30rem" max-height="25rem">
             <v-form v-if="isLogin" ref="form" v-model="valid" lazy-validation>
               <v-text-field
-                v-model="email"
-                :rules="emailRules"
+                v-model="loginUser.email"
                 label="E-mail"
+                @change="handle"
+                :rules="emailRules"
                 required
               ></v-text-field>
               <v-text-field
-                v-model="name"
-                :rules="nameRules"
+                v-model="loginUser.password"
+                :rules="passwordRules"
                 label="Password"
+                type="password"
                 required
               ></v-text-field>
-              <v-btn color="error" class="mr-4" @click="isLogin = !isLogin">
+              <div>
+                <p class="caption">
+                  Dont have an account ?
+                  <v-btn color="error" text x-small @click="isLogin = !isLogin">
+                    Register</v-btn
+                  >
+                </p>
+              </div>
+              <v-btn color="error" @click="login" class="mr-4 mt-2">
                 Login
               </v-btn>
             </v-form>
             <v-form v-else ref="form" v-model="valid" lazy-validation>
               <v-text-field
-                v-model="email"
-                :rules="emailRules"
+                v-model="registerUser.name"
+                :rules="nameRules"
                 label="Name"
                 required
               ></v-text-field>
               <v-text-field
-                v-model="email"
+                v-model="registerUser.email"
                 :rules="emailRules"
                 label="E-mail"
                 required
               ></v-text-field>
               <v-text-field
-                v-model="name"
-                :rules="nameRules"
+                v-model="registerUser.password"
+                :rules="passwordRules"
+                type="password"
                 label="Password"
                 required
               ></v-text-field>
-              <v-btn color="error" class="mr-4" @click="isLogin = !isLogin">
+              <p class="caption">
+                Already have an account ?
+                <v-btn color="error" text x-small @click="isLogin = !isLogin">
+                  Login</v-btn
+                >
+              </p>
+              <v-btn color="error" class="mr-4 mt-2" @click="register">
                 Register
               </v-btn>
             </v-form>
@@ -77,7 +103,55 @@ export default {
   data() {
     return {
       isLogin: false,
+      loginUser: {
+        email: "",
+        password: "",
+      },
+      registerUser: {
+        name: "",
+        email: "",
+        password: "",
+      },
+      nameRules: [(v) => !!v || "Name is required"],
+      passwordRules: [
+        (v) => !!v || "Password is required",
+        (v) =>
+          (v && v.length >= 8) || "Password must be greater than 8 characters",
+      ],
+      emailRules: [
+        (v) => !!v || "E-mail is required",
+        (v) => /.+@.+\..+/.test(v) || "E-mail must be valid",
+      ],
+      snackbar: false,
+      timeout: 2000,
+      errorText: "",
     };
+  },
+  methods: {
+    login() {
+      if (this.loginUser.email == "" || this.loginUser.password == "") {
+        this.errorText = "Please fill in the form";
+        this.snackbar = true;
+
+        return;
+      }
+      console.log(this.loginUser);
+      const data = this.loginUser;
+      this.$store.dispatch("loginUser", data);
+    },
+    register() {
+      if (
+        this.registerUser.email == "" ||
+        this.registerUser.password == "" ||
+        this.registerUser.name == ""
+      ) {
+        this.errorText = "Please fill in the form";
+        this.snackbar = true;
+        return;
+      }
+      console.log(this.registerUser);
+      this.$store.dispatch("registerUser", this.registerUser);
+    },
   },
 };
 </script>
