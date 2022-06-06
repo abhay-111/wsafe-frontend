@@ -3,7 +3,8 @@ import App from "./App.vue";
 import router from "./router";
 import store from "./store";
 import vuetify from "./plugins/vuetify";
-
+import "leaflet/dist/leaflet.css";
+import "leaflet-geosearch/dist/geosearch.css";
 Vue.config.productionTip = false;
 
 new Vue({

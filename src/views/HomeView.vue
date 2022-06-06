@@ -35,7 +35,6 @@
               <v-text-field
                 v-model="loginUser.email"
                 label="E-mail"
-                @change="handle"
                 :rules="emailRules"
                 required
               ></v-text-field>
@@ -135,9 +134,20 @@ export default {
 
         return;
       }
-      console.log(this.loginUser);
-      const data = this.loginUser;
-      this.$store.dispatch("loginUser", data);
+      this.$store
+        .dispatch("loginUser", this.loginUser)
+        .then((res) => {
+          this.errorText = res.data.message;
+          this.snackbar = true;
+
+          setTimeout(() => {
+            this.$router.push("/dashboard");
+          }, 500);
+        })
+        .catch((err) => {
+          this.errorText = err.response.data.error.message;
+          this.snackbar = true;
+        });
     },
     register() {
       if (
@@ -149,8 +159,20 @@ export default {
         this.snackbar = true;
         return;
       }
-      console.log(this.registerUser);
-      this.$store.dispatch("registerUser", this.registerUser);
+      this.$store
+        .dispatch("registerUser", this.registerUser)
+        .then((res) => {
+          this.errorText = res.data.message;
+          this.snackbar = true;
+          setTimeout(() => {
+            this.$router.push("/dashboard");
+          }, 500);
+        })
+        .catch((err) => {
+          console.log(err);
+          this.errorText = err.response.data.error.message;
+          this.snackbar = true;
+        });
     },
   },
 };
