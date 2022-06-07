@@ -13,6 +13,11 @@
       :attribution="tileProvider.attribution"
     />
     <l-geosearch :options="geoSearchOptions"></l-geosearch>
+    <l-control position="bottomleft">
+      <v-btn @click="enterViewMode">
+        {{ getControlButtonText }}
+      </v-btn>
+    </l-control>
     <l-marker
       v-if="position.lat && position.lng"
       visible
@@ -31,13 +36,16 @@
     <l-marker
       v-for="mark in markers"
       :key="mark"
-      :icon="icon"
+      :icon="getIcon(mark.tag)"
       :lat-lng="[mark.lat, mark.lng]"
     >
-      <l-tooltip
+      <l-popup>
+        {{ mark.tag }}
+      </l-popup>
+      <!-- <l-tooltip
         :content="getMarkerTag(mark.tag)"
         :options="{ permanent: true }"
-      />
+      /> -->
     </l-marker>
     <l-marker
       :icon="icon"
@@ -46,12 +54,20 @@
         this.userLocation.lng || defaultLocation.lng,
       ]"
     >
-      <l-tooltip :content="getCurrentPosition" :options="{ permanent: true }" />
+      <l-popup>You are hello!</l-popup>
+      <!-- <l-tooltip :content="getCurrentPosition" :options="{ permanent: true }" /> -->
     </l-marker>
   </l-map>
 </template>
 <script>
-import { LMap, LMarker, LTileLayer, LTooltip } from "vue2-leaflet";
+import {
+  LMap,
+  LMarker,
+  LTileLayer,
+  LTooltip,
+  LPopup,
+  LControl,
+} from "vue2-leaflet";
 import { OpenStreetMapProvider } from "leaflet-geosearch";
 import LGeosearch from "vue2-leaflet-geosearch";
 import { icon } from "leaflet";
@@ -62,6 +78,8 @@ export default {
     LMarker,
     LTooltip,
     LGeosearch,
+    LPopup,
+    LControl,
   },
   props: {
     value: {
@@ -101,6 +119,7 @@ export default {
       zoom: 18,
       dragging: false,
       markers: [],
+      viewMode: false,
     };
   },
   mounted() {
@@ -118,6 +137,9 @@ export default {
     },
   },
   computed: {
+    getControlButtonText() {
+      return this.viewMode ? "Exit View Mode" : "Enter View Mode";
+    },
     tooltipContent() {
       if (this.dragging) return "...";
       if (this.loading) return "Loading...";
@@ -133,6 +155,10 @@ export default {
     },
   },
   methods: {
+    enterViewMode() {
+      this.viewMode = !this.viewMode;
+      console.log(this.viewMode);
+    },
     async getAddress() {
       this.loading = true;
       let address = "Unresolved address";
@@ -153,6 +179,9 @@ export default {
     },
     async onMapClick(value) {
       // place the marker on the clicked spot
+      if (this.viewMode) {
+        return;
+      }
       this.position = value.latlng;
 
       this.$emit("mark");
@@ -182,6 +211,46 @@ export default {
     },
     getMarkerTag(tag) {
       return `<strong>${tag}</strong>`;
+    },
+    getIcon(tag) {
+      switch (tag) {
+        case "Pickpocket":
+          return icon({
+            iconRetinaUrl: require(`../assets/pickpocket.png`),
+            iconUrl: require(`../assets/pickpocket.png`),
+            shadowUrl: require("leaflet/dist/images/marker-shadow.png"),
+          });
+        case "Hecklers":
+          return icon({
+            iconRetinaUrl: require(`../assets/heckler.png`),
+            iconUrl: require(`../assets/heckler.png`),
+            shadowUrl: require("leaflet/dist/images/marker-shadow.png"),
+          });
+        case "No lights":
+          return icon({
+            iconRetinaUrl: require(`../assets/nolight.png`),
+            iconUrl: require(`../assets/nolight.png`),
+            shadowUrl: require("leaflet/dist/images/marker-shadow.png"),
+          });
+        case "Robbers":
+          return icon({
+            iconRetinaUrl: require(`../assets/robber.png`),
+            iconUrl: require(`../assets/robber.png`),
+            shadowUrl: require("leaflet/dist/images/marker-shadow.png"),
+          });
+        case "Criminals":
+          return icon({
+            iconRetinaUrl: require(`../assets/criminal.png`),
+            iconUrl: require(`../assets/criminal.png`),
+            shadowUrl: require("leaflet/dist/images/marker-shadow.png"),
+          });
+        case "Others":
+          return icon({
+            iconRetinaUrl: require(`../assets/redFlag.png`),
+            iconUrl: require(`../assets/redFlag.png`),
+            shadowUrl: require("leaflet/dist/images/marker-shadow.png"),
+          });
+      }
     },
   },
 };

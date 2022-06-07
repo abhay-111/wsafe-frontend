@@ -91,10 +91,7 @@
 
               <v-stepper-content step="2">
                 <v-card class="mb-12" color="grey lighten-1" height="200px">
-                  <v-img
-                    height="200"
-                    src="https://cdn.vuetifyjs.com/images/cards/cooking.png"
-                  ></v-img>
+                  <v-img height="200" src="../assets/stepper2.png"></v-img>
                 </v-card>
                 <p>
                   You can help others by marking the places where you have been
@@ -160,10 +157,12 @@
                 >Confirm</v-btn
               >
               <v-btn
-                class="error ml-4 mt-5"
-                @click="markerDialog = !markerDialog"
+                color="success accent-3 mt-5 ml-4"
+                @click="cancelDialog(1)"
                 small
-                text
+                >Relocate Marker</v-btn
+              >
+              <v-btn class="error ml-4 mt-5" @click="cancelDialog(2)" small text
                 >Cancel</v-btn
               >
             </v-card-text>
@@ -229,7 +228,14 @@ export default {
         name: "",
         email: "",
       },
-      states: ["Pickpocket", "Hecklers", "No lights", "Robbers", "Bandits"],
+      states: [
+        "Pickpocket",
+        "Hecklers",
+        "No lights",
+        "Robbers",
+        "Criminals",
+        "Others",
+      ],
     };
   },
   methods: {
@@ -239,7 +245,6 @@ export default {
     },
     markFlag() {
       this.markerDialog = true;
-      console.log("abhay");
     },
     addMarker() {
       console.log(this.markerTag);
@@ -248,6 +253,12 @@ export default {
       this.$refs.map.markers.push(data);
       this.$refs.map.position = {};
       this.markerDialog = false;
+    },
+    cancelDialog(id) {
+      this.markerDialog = false;
+      if (id === 2) {
+        this.$refs.map.position = {};
+      }
     },
   },
 };
