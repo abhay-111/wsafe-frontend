@@ -33,6 +33,11 @@
         :options="{ permanent: true }"
       />
     </l-marker>
+    <l-circle
+      :lat-lng="circle.center"
+      :radius="circle.radius"
+      :color="circle.color"
+    />
     <l-marker
       v-for="mark in markers"
       :key="mark"
@@ -67,6 +72,7 @@ import {
   LTooltip,
   LPopup,
   LControl,
+  LCircle,
 } from "vue2-leaflet";
 import { OpenStreetMapProvider } from "leaflet-geosearch";
 import LGeosearch from "vue2-leaflet-geosearch";
@@ -80,6 +86,7 @@ export default {
     LGeosearch,
     LPopup,
     LControl,
+    LCircle,
   },
   props: {
     value: {
@@ -120,6 +127,11 @@ export default {
       dragging: false,
       markers: [],
       viewMode: false,
+      circle: {
+        center: [28.41322, -1.0482],
+        radius: 450,
+        color: "red",
+      },
     };
   },
   mounted() {

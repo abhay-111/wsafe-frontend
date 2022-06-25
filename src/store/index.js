@@ -57,6 +57,44 @@ export default new Vuex.Store({
           });
       });
     },
+    sendOtp(state, data) {
+      return new Promise((resolve, reject) => {
+        axios({
+          method: "POST",
+          url: `${BASE_URL}auth/sendOtp`,
+          data: data,
+        })
+          .then((res) => {
+            if (res.status == 200) {
+              resolve(res);
+            } else {
+              reject(res);
+            }
+          })
+          .catch((err) => {
+            reject(err);
+          });
+      });
+    },
+    verifyOtp(state, data) {
+      return new Promise((resolve, reject) => {
+        axios({
+          method: "POST",
+          url: `${BASE_URL}auth/verifyOtp`,
+          data: data,
+        })
+          .then((res) => {
+            if (res.status == 200) {
+              resolve(res);
+            } else {
+              reject(res);
+            }
+          })
+          .catch((err) => {
+            reject(err);
+          });
+      });
+    },
   },
   modules: {},
 });

@@ -1,5 +1,35 @@
 <template>
   <v-container class="text-white fill-height">
+    <v-dialog
+      :hide-overlay="true"
+      v-model="otpDialog"
+      transition="dialog-bottom-transition"
+      max-width="500"
+    >
+      <v-card class="pa-5">
+        <v-card-title>
+          <h4>Enter your OTP</h4>
+        </v-card-title>
+        <v-card-text>
+          <strong>Otp sent at {{ registerUser.email }}</strong>
+          <div class="conatiner" style="max-width: 300px">
+            <v-otp-input v-model="otp" length="6" class="mt-3"></v-otp-input>
+            <p v-if="otpTimeout">
+              Otp not recieved ?
+              <span>
+                <v-btn x-small text @click="resendOtp" class="error"
+                  >Resend OTP</v-btn
+                >
+              </span>
+            </p>
+            <p v-else>Otp valid for next {{ otpTimer }} sec.</p>
+            <v-btn class="error mt-3" @click="verifyOtp" :disabled="!isActive"
+              >Verify OTP</v-btn
+            >
+          </div>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
     <v-snackbar v-model="snackbar" :timeout="timeout">
       {{ errorText }}
 
@@ -99,6 +129,11 @@
 // import logo from "";
 export default {
   name: "Home",
+  computed: {
+    isActive() {
+      return this.otp.length == 6;
+    },
+  },
   data() {
     return {
       isLogin: false,
@@ -124,6 +159,10 @@ export default {
       snackbar: false,
       timeout: 2000,
       errorText: "",
+      otpDialog: false,
+      otp: "",
+      otpTimer: 180,
+      otpTimeout: false,
     };
   },
   methods: {
@@ -147,6 +186,9 @@ export default {
         .catch((err) => {
           this.errorText = err.response.data.error.message;
           this.snackbar = true;
+          if (err.response.status == 401) {
+            this.sendOtp(this.loginUser);
+          }
         });
     },
     register() {
@@ -164,15 +206,60 @@ export default {
         .then((res) => {
           this.errorText = res.data.message;
           this.snackbar = true;
-          setTimeout(() => {
-            this.$router.push("/dashboard");
-          }, 500);
+          this.sendOtp(this.registerUser);
         })
         .catch((err) => {
           console.log(err);
           this.errorText = err.response.data.error.message;
           this.snackbar = true;
         });
+    },
+    startTimer() {
+      const timerInterval = setInterval(() => {
+        if (this.otpTimer == 0) {
+          clearInterval(timerInterval);
+          this.otpTimeout = true;
+          return;
+        }
+        this.otpTimer -= 1;
+      }, 1000);
+    },
+    verifyOtp() {
+      const data = {
+        otp: this.otp,
+        email: this.loginUser.email || this.registerUser.email,
+      };
+      this.$store
+        .dispatch("verifyOtp", data)
+        .then((res) => {
+          console.log(res);
+          setTimeout(() => {
+            this.$router.push("/dashboard");
+          }, 500);
+        })
+        .catch((err) => {
+          this.errorText = err.response.data.error.message;
+          this.snackbar = true;
+        });
+    },
+    sendOtp(userData) {
+      this.$store
+        .dispatch("sendOtp", userData)
+        .then((res) => {
+          console.log(res);
+          this.otpDialog = true;
+          this.startTimer();
+        })
+        .catch((err) => {
+          this.errorText = err.response.data.error.message;
+          this.snackbar = true;
+          this.otpDialog = true;
+          this.startTimer();
+        });
+    },
+    resendOtp() {
+      const user = this.loginUser || this.registerUser;
+      this.sendOtp(user);
     },
   },
 };

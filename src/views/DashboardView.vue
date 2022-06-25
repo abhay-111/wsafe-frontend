@@ -182,7 +182,7 @@
       <!-- -->
       <v-row align="center">
         <v-col cols="6">
-          <v-btn small color="error"> Logout</v-btn>
+          <v-btn small color="error" @click="logout"> Logout</v-btn>
         </v-col>
         <v-col justify="center" align="center" cols="6" class="white--text">
           {{ new Date().getFullYear() }} — <strong>W-Safe</strong>
@@ -259,6 +259,11 @@ export default {
       if (id === 2) {
         this.$refs.map.position = {};
       }
+    },
+    logout() {
+      localStorage.clear();
+      Cookie.remove("access-token");
+      this.$router.push("/");
     },
   },
 };
