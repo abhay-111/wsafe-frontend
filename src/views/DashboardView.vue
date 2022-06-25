@@ -18,7 +18,7 @@
       <v-list dense nav>
         <v-list-item
           v-for="(item, index) in items"
-          :key="item.title"
+          :key="index"
           link
           @click="handle(index)"
         >
@@ -173,7 +173,12 @@
       <!-- If using vue-router -->
       <keep-alive>
         <v-container fluid class="ma-0 pa-0" style="height: 86vh">
-          <component ref="map" @mark="markFlag" :is="current"></component>
+          <component
+            ref="map"
+            @mark="markFlag"
+            :markers="markers"
+            :is="current"
+          ></component>
         </v-container>
       </keep-alive>
     </v-main>
@@ -195,9 +200,11 @@
 <script>
 import Cookie from "js-cookie";
 import MapComponent from "../components/MapView.vue";
+import getAllMarkers from "../components/AllMarkers.vue";
 export default {
   components: {
     MapComponent,
+    getAllMarkers,
   },
   mounted() {
     if (Cookie.get("access-token") == undefined) {
@@ -206,6 +213,9 @@ export default {
     }
     this.userData.name = Cookie.get("name");
     this.userData.email = Cookie.get("email");
+    this.$store.dispatch("getAllMarkers").then((res) => {
+      this.markers = res.data.markers;
+    });
   },
   data() {
     return {
@@ -219,8 +229,7 @@ export default {
           icon: "mdi-view-dashboard",
           value: "MapComponent",
         },
-        { title: "Your Flags", icon: "mdi-image", value: "Bi" },
-        // { title: "About", icon: "mdi-help-box", value: "Super" },
+        { title: "Your Flags", icon: "mdi-image", value: "getAllMarkers" },
       ],
       right: null,
       current: "MapComponent",
@@ -236,10 +245,14 @@ export default {
         "Criminals",
         "Others",
       ],
+      markers: null,
     };
   },
   methods: {
     handle(index) {
+      if (index) {
+        this.dialog = false;
+      }
       console.log(this.items[index].value);
       this.current = this.items[index].value;
     },
@@ -247,9 +260,15 @@ export default {
       this.markerDialog = true;
     },
     addMarker() {
-      console.log(this.markerTag);
       const data = this.$refs.map.position;
       data["tag"] = this.markerTag;
+      data["email"] = this.userData.email;
+      console.log(data);
+      this.$store.dispatch("addMarker", data).then(() => {
+        this.$store.dispatch("getAllMarkers").then((res) => {
+          this.markers = res.data.markers;
+        });
+      });
       this.$refs.map.markers.push(data);
       this.$refs.map.position = {};
       this.markerDialog = false;

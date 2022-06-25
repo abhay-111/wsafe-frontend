@@ -95,6 +95,46 @@ export default new Vuex.Store({
           });
       });
     },
+    addMarker(state, data) {
+      return new Promise((resolve, reject) => {
+        axios({
+          method: "POST",
+          url: `${BASE_URL}user/addMarker`,
+          data: data,
+        })
+          .then((res) => {
+            console.log(res);
+            if (res.status == 200) {
+              resolve(res);
+            } else {
+              reject(res);
+            }
+          })
+          .catch((err) => {
+            reject(err);
+          });
+      });
+    },
+    getAllMarkers(state) {
+      console.log(state);
+      return new Promise((resolve, reject) => {
+        axios({
+          method: "GET",
+          url: `${BASE_URL}user/getAllMarkers`,
+        })
+          .then((res) => {
+            console.log(res);
+            if (res.status == 200) {
+              resolve(res);
+            } else {
+              reject(res);
+            }
+          })
+          .catch((err) => {
+            reject(err);
+          });
+      });
+    },
   },
   modules: {},
 });
