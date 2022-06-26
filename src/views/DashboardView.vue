@@ -39,6 +39,17 @@
           </v-list-item-content>
         </v-list-item>
       </v-list>
+      <v-list>
+        <v-list-item @click="logout" class="logout-button" link>
+          <v-list-item-icon>
+            <v-icon>mdi-export</v-icon>
+          </v-list-item-icon>
+
+          <v-list-item-content>
+            <v-list-item-title>Logout</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
     </v-navigation-drawer>
 
     <v-app-bar app>
@@ -92,7 +103,9 @@
 
                 <v-btn color="primary" @click="e1 = 2"> Continue </v-btn>
 
-                <v-btn text @click="dialog = !dialog"> Cancel </v-btn>
+                <v-btn text class="ml-3" @click="dialog = !dialog">
+                  Cancel
+                </v-btn>
               </v-stepper-content>
 
               <v-stepper-content step="2">
@@ -106,7 +119,9 @@
                 </p>
                 <v-btn color="primary" @click="e1 = 3"> Continue </v-btn>
 
-                <v-btn text @click="dialog = !dialog"> Cancel </v-btn>
+                <v-btn text class="ml-3" @click="dialog = !dialog">
+                  Cancel
+                </v-btn>
               </v-stepper-content>
 
               <v-stepper-content step="3">
@@ -127,7 +142,7 @@
                 <div class="mt-5">
                   <v-btn color="primary" @click="e1 = 1"> Continue </v-btn>
 
-                  <v-btn class="ml-2" text @click="dialog = !dialog">
+                  <v-btn class="ml-5" text @click="dialog = !dialog">
                     Cancel
                   </v-btn>
                 </div>
@@ -192,11 +207,8 @@
 
     <v-footer color="red accent-3 text-white" app>
       <!-- -->
-      <v-row align="center">
-        <v-col cols="6">
-          <v-btn small color="error" @click="logout"> Logout</v-btn>
-        </v-col>
-        <v-col cols="6" class="white--text">
+      <v-row align="center" justify="center">
+        <v-col cols="12" class="white--text d-flex justify-center align-center">
           <span>
             <strong>W-Safe</strong> - {{ new Date().getFullYear() }}
           </span>
@@ -239,6 +251,13 @@ export default {
           value: "MapComponent",
         },
         { title: "Your Flags", icon: "mdi-image", value: "getAllMarkers" },
+        {
+          title: "Upload Images",
+          icon: "mdi-cloud-upload",
+          value: "getAllMarkers",
+        },
+        { title: "Chat Online", icon: "mdi-forum", value: "getAllMarkers" },
+        { title: "Your Notes", icon: "mdi-book", value: "getAllMarkers" },
       ],
       right: null,
       current: "MapComponent",
@@ -309,5 +328,10 @@ export default {
   padding: 10px 10px;
   border: 1px solid #ff1744;
   border-radius: 50%;
+}
+.logout-button {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
 }
 </style>
