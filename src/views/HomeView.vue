@@ -46,8 +46,8 @@
           <img src="../assets/W-safewhite.png" height="150px" alt="" />
         </div>
       </v-col>
-      <v-col cols="6">
-        <div class="">
+      <v-col xs="12" sm="12" md="6">
+        <div class="container">
           <h1>Check before you leave.</h1>
           <h1>Be safe.</h1>
           <h1>Help Others.</h1>
@@ -58,7 +58,7 @@
           </p>
         </div>
       </v-col>
-      <v-col cols="6">
+      <v-col xs="12" sm="12" md="6">
         <div class="pa-5">
           <v-card class="pa-10" max-width="30rem" max-height="25rem">
             <v-form v-if="isLogin" ref="form" v-model="valid" lazy-validation>
@@ -120,7 +120,6 @@
           </v-card>
         </div>
       </v-col>
-      <v-col cols="6"> </v-col>
     </v-row>
   </v-container>
 </template>
