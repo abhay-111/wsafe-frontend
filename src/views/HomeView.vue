@@ -5,6 +5,7 @@
       v-model="otpDialog"
       transition="dialog-bottom-transition"
       max-width="500"
+      :persistent="true"
     >
       <v-card class="pa-5">
         <v-card-title>
