@@ -51,10 +51,9 @@
           <h1>Be safe.</h1>
           <h1>Help Others.</h1>
           <p class="mt-5">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit.
-            Exercitationem,. Lorem ipsum, dolor sit amet consectetur adipisicing
-            elit. Consequatur et cum facilis temporibus quisquam ipsam sunt,
-            incidunt eaque nobis molestias!
+            W-Safe provides a platform to checkout the locality you might be
+            visiting in the near future and helps you make better decision based
+            on the locality and others experiences.
           </p>
         </div>
       </v-col>
