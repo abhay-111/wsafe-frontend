@@ -2,6 +2,12 @@
   <v-app>
     <v-navigation-drawer app>
       <!-- -->
+      <div class="container d-flex justify-center align-center">
+        <v-icon color="#FF1744 " size="50px" class="user-icon">
+          mdi-account
+        </v-icon>
+      </div>
+
       <v-list-item>
         <v-list-item-content>
           <v-list-item-title class="text-h6">
@@ -176,6 +182,7 @@
           <component
             ref="map"
             @mark="markFlag"
+            @delete-marker="deleteMarker"
             :markers="markers"
             :is="current"
           ></component>
@@ -189,8 +196,10 @@
         <v-col cols="6">
           <v-btn small color="error" @click="logout"> Logout</v-btn>
         </v-col>
-        <v-col justify="center" align="center" cols="6" class="white--text">
-          {{ new Date().getFullYear() }} — <strong>W-Safe</strong>
+        <v-col cols="6" class="white--text">
+          <span>
+            <strong>W-Safe</strong> - {{ new Date().getFullYear() }}
+          </span>
         </v-col>
       </v-row>
     </v-footer>
@@ -269,7 +278,6 @@ export default {
           this.markers = res.data.markers;
         });
       });
-      this.$refs.map.markers.push(data);
       this.$refs.map.position = {};
       this.markerDialog = false;
     },
@@ -284,8 +292,22 @@ export default {
       Cookie.remove("access-token");
       this.$router.push("/");
     },
+    deleteMarker(e) {
+      this.$store.dispatch("deleteMarker", e).then(() => {
+        console.log("d");
+        this.$store.dispatch("getAllMarkers").then((res) => {
+          this.markers = res.data.markers;
+        });
+      });
+    },
   },
 };
 </script>
 
-<style></style>
+<style>
+.user-icon {
+  padding: 10px 10px;
+  border: 1px solid #ff1744;
+  border-radius: 50%;
+}
+</style>

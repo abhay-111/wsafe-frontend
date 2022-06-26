@@ -135,6 +135,26 @@ export default new Vuex.Store({
           });
       });
     },
+    deleteMarker(state, data) {
+      console.log(state, data);
+      return new Promise((resolve, reject) => {
+        axios({
+          method: "DELETE",
+          url: `${BASE_URL}user/deleteMarker/${data}`,
+        })
+          .then((res) => {
+            console.log(res);
+            if (res.status == 204) {
+              resolve(res);
+            } else {
+              reject(res);
+            }
+          })
+          .catch((err) => {
+            reject(err);
+          });
+      });
+    },
   },
   modules: {},
 });

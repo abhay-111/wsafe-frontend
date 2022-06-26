@@ -120,7 +120,7 @@ export default {
         url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
       },
       currentPosition: [],
-      zoom: 18,
+      zoom: 17,
       dragging: false,
       viewMode: false,
     };
