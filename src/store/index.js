@@ -3,7 +3,7 @@ import Vuex from "vuex";
 import axios from "axios";
 import Cookie from "js-cookie";
 Vue.use(Vuex);
-const BASE_URL = "https://intense-savannah-60242.herokuapp.com/";
+const BASE_URL = "http://localhost:8000/";
 export default new Vuex.Store({
   state: {},
   mutations: {},
@@ -42,11 +42,6 @@ export default new Vuex.Store({
           .then((res) => {
             if (res.status == 200) {
               console.log(res);
-              Cookie.set("access-token", res.data.user.token);
-              Cookie.set("name", res.data.user.name);
-              Cookie.set("email", res.data.user.email);
-              Cookie.set("userId", res.data.user.userId);
-              localStorage.setItem("access-token", res.data.user.token);
               resolve(res);
             } else {
               reject(res);
@@ -85,6 +80,11 @@ export default new Vuex.Store({
         })
           .then((res) => {
             if (res.status == 200) {
+              Cookie.set("access-token", res.data.user.token);
+              Cookie.set("name", res.data.user.name);
+              Cookie.set("email", res.data.user.email);
+              Cookie.set("userId", res.data.user.userId);
+              localStorage.setItem("access-token", res.data.user.token);
               resolve(res);
             } else {
               reject(res);

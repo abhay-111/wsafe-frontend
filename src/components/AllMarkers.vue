@@ -29,9 +29,35 @@
         </v-list-item-content>
 
         <v-list-item-action>
-          <v-btn @click="deleteMarker(marker._id)" icon>
-            <v-icon color="grey lighten-1">mdi-delete</v-icon>
-          </v-btn>
+          <span>
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                  @click="createBlog(marker._id)"
+                  v-bind="attrs"
+                  v-on="on"
+                  icon
+                >
+                  <v-icon color="grey lighten-1">mdi-book-edit</v-icon>
+                </v-btn>
+              </template>
+              <span>Blog about marker</span>
+            </v-tooltip>
+            <v-tooltip top>
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                  class="ml-5"
+                  @click="deleteMarker(marker._id)"
+                  v-bind="attrs"
+                  v-on="on"
+                  icon
+                >
+                  <v-icon color="grey lighten-1">mdi-delete</v-icon>
+                </v-btn>
+              </template>
+              <span>Delete Marker</span>
+            </v-tooltip>
+          </span>
         </v-list-item-action>
       </v-list-item>
       <v-divider inset></v-divider>
@@ -44,9 +70,9 @@ export default {
   computed: {
     myMarkers() {
       const markers = this.markers.filter((marker) => {
-        return marker.email != "abhaychauhan232@gmail.com";
+        return marker.email != localStorage.getItem("email");
       });
-      return markers;
+      return markers.reverse();
     },
   },
   props: {
@@ -63,6 +89,9 @@ export default {
     deleteMarker(id) {
       // console.log(id);
       this.$emit("delete-marker", id);
+    },
+    createBlog(id) {
+      console.log(id);
     },
   },
 };

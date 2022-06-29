@@ -40,7 +40,9 @@
       :lat-lng="[mark.lat, mark.lng]"
     >
       <l-popup>
-        {{ mark.tag }}
+        <strong> {{ mark.tag }}</strong>
+        <br />
+        {{ mark.description }}
       </l-popup>
       <!-- <l-tooltip
         :content="getMarkerTag(mark.tag)"

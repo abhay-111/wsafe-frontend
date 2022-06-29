@@ -3,9 +3,11 @@
     <v-navigation-drawer app>
       <!-- -->
       <div class="container d-flex justify-center align-center">
-        <v-icon color="#FF1744 " size="50px" class="user-icon">
-          mdi-account
-        </v-icon>
+        <v-avatar color="error" size="64">
+          <span class="white--text text-h5">{{
+            userData.name.substring(0, 2).toUpperCase()
+          }}</span>
+        </v-avatar>
       </div>
 
       <v-list-item>
@@ -55,7 +57,7 @@
     <v-app-bar app>
       <!-- -->
       <!-- <v-app-bar-title shrink-on-scroll> W-safe </v-app-bar-title> -->
-      <v-app-bar-nav-icon>
+      <v-app-bar-nav-icon @click="gotoHome()">
         <v-img height="50px" width="50px" src="../assets/W-safe.png"> </v-img>
       </v-app-bar-nav-icon>
       <h2 class="ml-3">W-Safe</h2>
@@ -152,6 +154,7 @@
         </v-card>
       </v-dialog>
       <v-dialog
+        persistent
         :hide-overlay="true"
         v-model="markerDialog"
         transition="dialog-bottom-transition"
@@ -165,7 +168,7 @@
             <v-card-text>
               <strong>Please add a tag to the marker.</strong>
               <v-select
-                v-model="markerTag"
+                v-model="marker.markerTag"
                 :items="states"
                 menu-props="auto"
                 label="Select"
@@ -174,6 +177,14 @@
                 class="mb-5"
                 single-line
               ></v-select>
+              <v-text-field
+                v-model="marker.markerDescription"
+                counter
+                prepend-icon="mdi-bullhorn"
+                maxlength="50"
+                hint="Describe under 2 lines."
+                label="Description"
+              ></v-text-field>
               <v-btn color="success accent-3 mt-5" @click="addMarker" small
                 >Confirm</v-btn
               >
@@ -243,7 +254,10 @@ export default {
       dialog: true,
       markerDialog: false,
       e1: 1,
-      markerTag: "Pickpocket",
+      marker: {
+        markerTag: "Pickpocket",
+        markerDescription: "",
+      },
       items: [
         {
           title: "Mark a flag",
@@ -251,13 +265,7 @@ export default {
           value: "MapComponent",
         },
         { title: "Your Flags", icon: "mdi-image", value: "getAllMarkers" },
-        {
-          title: "Upload Images",
-          icon: "mdi-cloud-upload",
-          value: "getAllMarkers",
-        },
-        { title: "Chat Online", icon: "mdi-forum", value: "getAllMarkers" },
-        { title: "Your Notes", icon: "mdi-book", value: "getAllMarkers" },
+        { title: "Your Blogs", icon: "mdi-book", value: "getAllMarkers" },
       ],
       right: null,
       current: "MapComponent",
@@ -283,20 +291,24 @@ export default {
       }
       console.log(this.items[index].value);
       this.current = this.items[index].value;
+      this.markerDialog = false;
+      this.dialog = false;
     },
     markFlag() {
       this.markerDialog = true;
     },
     addMarker() {
       const data = this.$refs.map.position;
-      data["tag"] = this.markerTag;
+      data["tag"] = this.marker.markerTag;
       data["email"] = this.userData.email;
+      data["description"] = this.marker.markerDescription;
       console.log(data);
       this.$store.dispatch("addMarker", data).then(() => {
         this.$store.dispatch("getAllMarkers").then((res) => {
           this.markers = res.data.markers;
         });
       });
+      this.marker.markerDescription = "";
       this.$refs.map.position = {};
       this.markerDialog = false;
     },
@@ -318,6 +330,9 @@ export default {
           this.markers = res.data.markers;
         });
       });
+    },
+    gotoHome() {
+      this.current = this.items[0].value;
     },
   },
 };
