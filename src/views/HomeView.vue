@@ -24,8 +24,71 @@
               </span>
             </p>
             <p v-else>Otp valid for next {{ otpTimer }} sec.</p>
-            <v-btn class="error mt-3" @click="verifyOtp" :disabled="!isActive"
+            <v-btn class="error mt-3" @click="verifyOtp()" :disabled="!isActive"
               >Verify OTP</v-btn
+            >
+          </div>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
+    <v-dialog
+      :hide-overlay="true"
+      v-model="forgotPasswordDialog"
+      transition="dialog-bottom-transition"
+      max-width="500"
+      :persistent="false"
+    >
+      <v-card class="pa-5">
+        <v-card-title>
+          <h4>Enter your registered Email</h4>
+        </v-card-title>
+        <v-card-text>
+          <div class="conatiner" style="max-width: 300px">
+            <v-text-field
+              v-model="forgotEmail"
+              prepend-icon="mdi-email"
+              hint="Enter your email."
+              :rules="emailRules"
+              label="Email"
+            ></v-text-field>
+            <br />
+            <v-btn small class="error mt-3" @click="sendForgotPasswordMail"
+              >Send Resest OTP</v-btn
+            >
+          </div>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
+    <v-dialog
+      :hide-overlay="true"
+      v-model="setNewPassword"
+      transition="dialog-bottom-transition"
+      max-width="500"
+      :persistent="true"
+    >
+      <v-card class="pa-5">
+        <v-card-title>
+          <h4>Create New Password</h4>
+        </v-card-title>
+        <v-card-text>
+          <div class="conatiner" style="max-width: 300px">
+            <v-text-field
+              v-model="changePassword.password"
+              :rules="passwordRules"
+              label="Password"
+              type="password"
+              required
+            ></v-text-field>
+            <v-text-field
+              v-model="changePassword.confirmPassword"
+              :rules="passwordRules"
+              label="Confirm Password"
+              type="password"
+              required
+            ></v-text-field>
+            <br />
+            <v-btn small class="error mt-3" @click="createNewPassword"
+              >Create New Password</v-btn
             >
           </div>
         </v-card-text>
@@ -61,7 +124,7 @@
       <v-col xs="12" sm="12" md="6">
         <div class="pa-5">
           <v-card class="pa-10" max-width="30rem" max-height="25rem">
-            <v-form v-if="isLogin" ref="form" v-model="valid" lazy-validation>
+            <v-form v-if="isLogin" ref="form">
               <v-text-field
                 v-model="loginUser.email"
                 label="E-mail"
@@ -77,6 +140,12 @@
               ></v-text-field>
               <div>
                 <p class="caption">
+                  Forgot Password
+                  <v-btn text x-small color="error" @click="forgotPassword"
+                    >Forgot Password</v-btn
+                  >
+                </p>
+                <p class="caption">
                   Dont have an account ?
                   <v-btn color="error" text x-small @click="isLogin = !isLogin">
                     Register</v-btn
@@ -87,7 +156,7 @@
                 Login
               </v-btn>
             </v-form>
-            <v-form v-else ref="form" v-model="valid" lazy-validation>
+            <v-form v-else ref="form" lazy-validation>
               <v-text-field
                 v-model="registerUser.name"
                 :rules="nameRules"
@@ -162,6 +231,13 @@ export default {
       otp: "",
       otpTimer: 180,
       otpTimeout: false,
+      forgotPasswordDialog: false,
+      forgotEmail: "",
+      setNewPassword: false,
+      changePassword: {
+        password: "",
+        confirmPassword: "",
+      },
     };
   },
   methods: {
@@ -226,15 +302,21 @@ export default {
     verifyOtp() {
       const data = {
         otp: this.otp,
-        email: this.loginUser.email || this.registerUser.email,
+        email:
+          this.loginUser.email || this.registerUser.email || this.forgotEmail,
       };
+      if (this.forgotEmail != "") {
+        data.email = this.forgotEmail;
+      }
       this.$store
         .dispatch("verifyOtp", data)
-        .then((res) => {
-          console.log(res);
-          setTimeout(() => {
+        .then(() => {
+          if (data.email == this.forgotEmail) {
+            this.setNewPassword = true;
+            this.otpDialog = false;
+          } else {
             this.$router.push("/dashboard");
-          }, 500);
+          }
         })
         .catch((err) => {
           this.errorText = err.response.data.error.message;
@@ -256,9 +338,53 @@ export default {
           this.startTimer();
         });
     },
+    forgotPassword() {
+      this.forgotPasswordDialog = true;
+    },
+    sendForgotPasswordMail() {
+      this.$store
+        .dispatch("forgotPassword", this.forgotEmail)
+        .then(() => {
+          const data = {
+            email: this.forgotEmail,
+          };
+          this.$store
+            .dispatch("sendOtp", data)
+            .then(() => {
+              this.forgotPasswordDialog = false;
+              this.otpDialog = true;
+            })
+            .catch((err) => {
+              this.errorText = err.response.data.error.message;
+              this.snackbar = true;
+            });
+        })
+        .catch((err) => {
+          this.errorText = err.response.data.error.message;
+          this.snackbar = true;
+        });
+    },
     resendOtp() {
       const user = this.loginUser || this.registerUser;
       this.sendOtp(user);
+    },
+    createNewPassword() {
+      if (this.changePassword.password != this.changePassword.confirmPassword) {
+        this.errorText = "Passwords do not match";
+        this.snackbar = true;
+        return;
+      }
+      const data = this.changePassword;
+      data["email"] = this.forgotEmail;
+      this.$store.dispatch("createNewPassword", data).then((res) => {
+        this.setNewPassword = false;
+        this.forgotEmail = "";
+        this.changePassword.password = "";
+        this.changePassword.confirmPassword = "";
+        this.otp = "";
+        this.errorText = res.data.message;
+        this.snackbar = true;
+      });
     },
   },
 };

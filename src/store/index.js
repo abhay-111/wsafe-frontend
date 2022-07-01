@@ -21,6 +21,7 @@ export default new Vuex.Store({
               Cookie.set("name", res.data.user.name);
               Cookie.set("email", res.data.user.email);
               Cookie.set("userId", res.data.user.userId);
+              localStorage.setItem("email", res.data.user.email);
               localStorage.setItem("access-token", res.data.user.token);
               resolve(res);
             } else {
@@ -83,8 +84,53 @@ export default new Vuex.Store({
               Cookie.set("access-token", res.data.user.token);
               Cookie.set("name", res.data.user.name);
               Cookie.set("email", res.data.user.email);
+              localStorage.setItem("email", res.data.user.email);
               Cookie.set("userId", res.data.user.userId);
               localStorage.setItem("access-token", res.data.user.token);
+              localStorage.setItem("showHelper", true);
+              resolve(res);
+            } else {
+              reject(res);
+            }
+          })
+          .catch((err) => {
+            reject(err);
+          });
+      });
+    },
+    forgotPassword(state, data) {
+      const sendData = {
+        email: data,
+      };
+      return new Promise((resolve, reject) => {
+        axios({
+          method: "POST",
+          url: `${BASE_URL}auth/forgotPassword`,
+          data: sendData,
+        })
+          .then((res) => {
+            console.log(res);
+            if (res.status == 200) {
+              resolve(res);
+            } else {
+              reject(res);
+            }
+          })
+          .catch((err) => {
+            reject(err);
+          });
+      });
+    },
+    createNewPassword(state, data) {
+      return new Promise((resolve, reject) => {
+        axios({
+          method: "POST",
+          url: `${BASE_URL}auth/createNewPassword`,
+          data: data,
+        })
+          .then((res) => {
+            console.log(res);
+            if (res.status == 200) {
               resolve(res);
             } else {
               reject(res);

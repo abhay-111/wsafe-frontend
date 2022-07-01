@@ -30,7 +30,7 @@
 
         <v-list-item-action>
           <span>
-            <v-tooltip bottom>
+            <!-- <v-tooltip bottom>
               <template v-slot:activator="{ on, attrs }">
                 <v-btn
                   @click="createBlog(marker._id)"
@@ -42,7 +42,7 @@
                 </v-btn>
               </template>
               <span>Blog about marker</span>
-            </v-tooltip>
+            </v-tooltip> -->
             <v-tooltip top>
               <template v-slot:activator="{ on, attrs }">
                 <v-btn
@@ -70,7 +70,7 @@ export default {
   computed: {
     myMarkers() {
       const markers = this.markers.filter((marker) => {
-        return marker.email != localStorage.getItem("email");
+        return marker.email === localStorage.getItem("email");
       });
       return markers.reverse();
     },
@@ -84,6 +84,12 @@ export default {
     return {
       notfound: require("../assets/notfound.svg"),
     };
+  },
+  mounted() {
+    const markers = this.markers.filter((marker) => {
+      return marker.email === localStorage.getItem("email");
+    });
+    console.log(markers, localStorage.getItem("email"));
   },
   methods: {
     deleteMarker(id) {

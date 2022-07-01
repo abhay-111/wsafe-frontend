@@ -97,17 +97,13 @@
                   <v-img height="200" src="../assets/stepper1.png"></v-img>
                 </v-card>
                 <p>
-                  W-Safe is a web application that helps you check the
+                  W-Safe is a web application that helps you navigate your
                   neighbourhood that you might be visiting in the near future.
-                  It helps to community to make a better decision on places to
-                  travel.
+                  It helps the community to make a better decision about the
+                  places one might travel.
                 </p>
 
-                <v-btn color="primary" @click="e1 = 2"> Continue </v-btn>
-
-                <v-btn text class="ml-3" @click="dialog = !dialog">
-                  Cancel
-                </v-btn>
+                <v-btn color="primary" @click="e1 = 2"> Next </v-btn>
               </v-stepper-content>
 
               <v-stepper-content step="2">
@@ -116,13 +112,13 @@
                 </v-card>
                 <p>
                   You can help others by marking the places where you have been
-                  recently and experienced something which was not safe. It can
-                  be anything like you got robbed , you were heckled etc.
+                  to recently and experienced something which was not safe. You
+                  can select from different types of markers to provide a
+                  detailed description about that place.
                 </p>
-                <v-btn color="primary" @click="e1 = 3"> Continue </v-btn>
-
-                <v-btn text class="ml-3" @click="dialog = !dialog">
-                  Cancel
+                <v-btn color="primary" @click="e1 = 1"> Go Back </v-btn>
+                <v-btn color="primary" class="ml-3" @click="e1 = 3">
+                  Next
                 </v-btn>
               </v-stepper-content>
 
@@ -138,15 +134,13 @@
                 </v-row>
                 <p>
                   Just double click on the location to place the marker onto the
-                  map and fill out an easy form to add information . And thats
-                  it .
+                  map and fill out an easy form to add information .
+                  <strong> And thats it!! . </strong>
                 </p>
                 <div class="mt-5">
-                  <v-btn color="primary" @click="e1 = 1"> Continue </v-btn>
+                  <v-btn color="primary" @click="e1 = 2"> Go Back </v-btn>
 
-                  <v-btn class="ml-5" text @click="dialog = !dialog">
-                    Cancel
-                  </v-btn>
+                  <v-btn class="ml-5" text @click="closeHelper"> Cancel </v-btn>
                 </div>
               </v-stepper-content>
             </v-stepper-items>
@@ -269,7 +263,6 @@ export default {
           value: "MapComponent",
         },
         { title: "Your Flags", icon: "mdi-image", value: "getAllMarkers" },
-        { title: "Your Blogs", icon: "mdi-book", value: "getAllMarkers" },
       ],
       right: null,
       current: "MapComponent",
@@ -337,6 +330,9 @@ export default {
     },
     gotoHome() {
       this.current = this.items[0].value;
+    },
+    closeHelper() {
+      this.dialog = !this.dialog;
     },
   },
 };
