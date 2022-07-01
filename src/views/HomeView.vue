@@ -12,7 +12,10 @@
           <h4>Enter your OTP</h4>
         </v-card-title>
         <v-card-text>
-          <strong>Otp sent at {{ registerUser.email }}</strong>
+          <strong
+            >Otp sent at
+            {{ registerUser.email || loginUser.email || forgotEmail }}</strong
+          >
           <div class="conatiner" style="max-width: 300px">
             <v-otp-input v-model="otp" length="6" class="mt-3"></v-otp-input>
             <p v-if="otpTimeout">
