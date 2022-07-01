@@ -352,6 +352,7 @@ export default {
             .dispatch("sendOtp", data)
             .then(() => {
               this.forgotPasswordDialog = false;
+              this.startTimer();
               this.otpDialog = true;
             })
             .catch((err) => {
