@@ -182,7 +182,7 @@
                 counter
                 prepend-icon="mdi-bullhorn"
                 maxlength="50"
-                hint="Describe under 2 lines."
+                hint="Describe under 3 lines."
                 label="Description"
               ></v-text-field>
               <v-btn color="success accent-3 mt-5" @click="addMarker" small
@@ -204,7 +204,11 @@
       <!-- Provides the application the proper gutter -->
       <!-- If using vue-router -->
       <keep-alive>
-        <v-container fluid class="ma-0 pa-0" style="height: 86vh">
+        <v-container
+          fluid
+          class="ma-0 pa-0 grey lighten-5"
+          style="height: 86vh"
+        >
           <component
             ref="map"
             @mark="markFlag"
@@ -275,7 +279,7 @@ export default {
       },
       states: [
         "Pickpocket",
-        "Hecklers",
+        "Eve Teasers",
         "No lights",
         "Robbers",
         "Criminals",
@@ -309,7 +313,7 @@ export default {
         });
       });
       this.marker.markerDescription = "";
-      this.$refs.map.position = {};
+      this.$refs.map.isPlacing = false;
       this.markerDialog = false;
     },
     cancelDialog(id) {

@@ -18,8 +18,13 @@
         {{ getControlButtonText }}
       </v-btn>
     </l-control>
+    <l-circle
+      :lat-lng="getUserCircle.center"
+      :radius="getUserCircle.radius"
+      :color="getUserCircle.color"
+    />
     <l-marker
-      v-if="position.lat && position.lng"
+      v-if="position.lat && position.lng && isPlacing"
       visible
       draggable
       :icon="icon"
@@ -27,11 +32,9 @@
       @dragstart="dragging = true"
       @dragend="sendConfirmation"
     >
-      <l-tooltip
-        class="ml-5"
-        :content="tooltipContent"
-        :options="{ permanent: true }"
-      />
+      <l-tooltip class="" :options="{ permanent: true }">
+        <div v-html="tooltipContent"></div>
+      </l-tooltip>
     </l-marker>
     <l-marker
       v-for="(mark, index) in markers"
@@ -40,9 +43,11 @@
       :lat-lng="[mark.lat, mark.lng]"
     >
       <l-popup>
-        <strong> {{ mark.tag }}</strong>
-        <br />
-        {{ mark.description }}
+        <div>
+          <strong> {{ mark.tag }}</strong>
+          <br />
+          <span>{{ mark.description }}</span>
+        </div>
       </l-popup>
       <!-- <l-tooltip
         :content="getMarkerTag(mark.tag)"
@@ -56,7 +61,7 @@
         this.userLocation.lng || defaultLocation.lng,
       ]"
     >
-      <l-popup>You are hello!</l-popup>
+      <l-popup>You are here!</l-popup>
       <!-- <l-tooltip :content="getCurrentPosition" :options="{ permanent: true }" /> -->
     </l-marker>
   </l-map>
@@ -69,6 +74,7 @@ import {
   LTooltip,
   LPopup,
   LControl,
+  LCircle,
 } from "vue2-leaflet";
 import { OpenStreetMapProvider } from "leaflet-geosearch";
 import LGeosearch from "vue2-leaflet-geosearch";
@@ -82,6 +88,7 @@ export default {
     LGeosearch,
     LPopup,
     LControl,
+    LCircle,
   },
   props: {
     value: {
@@ -121,10 +128,16 @@ export default {
           '&copy; <a target="_blank" href="http://osm.org/copyright">OpenStreetMap</a> contributors',
         url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
       },
+      circle: {
+        center: [],
+        radius: 450,
+        color: "red",
+      },
       currentPosition: [],
       zoom: 17,
       dragging: false,
       viewMode: false,
+      isPlacing: false,
     };
   },
   mounted() {
@@ -153,10 +166,18 @@ export default {
         "<br/>"
       )}</strong> <hr/><strong>lat:</strong> ${
         this.position.lat
-      }<br/> <strong>lng:</strong> ${this.position.lng}`;
+      }<br/> <strong>lng:</strong> ${this.position.lng}  `;
     },
     getCurrentPosition() {
       return `<strong>You are here</strong>`;
+    },
+    getUserCircle() {
+      const circle = {
+        center: [28.566547327321654, 77.38246147950397],
+        radius: 450,
+        color: "red",
+      };
+      return circle;
     },
   },
   methods: {
@@ -187,8 +208,8 @@ export default {
       if (this.viewMode) {
         return;
       }
+      this.isPlacing = true;
       this.position = value.latlng;
-
       this.$emit("mark");
     },
     onSearch(value) {
@@ -206,6 +227,9 @@ export default {
           };
           this.currentPosition.push(pos.coords.latitude);
           this.currentPosition.push(pos.coords.longitude);
+          this.circle.center.push(pos.coords.latitude);
+          this.circle.center.push(pos.coords.longitude);
+
           console.log("abhay", this.userLocation);
         });
       }
@@ -225,7 +249,7 @@ export default {
             iconUrl: require(`../assets/pickpocket.png`),
             shadowUrl: require("leaflet/dist/images/marker-shadow.png"),
           });
-        case "Hecklers":
+        case "Eve Teasers":
           return icon({
             iconRetinaUrl: require(`../assets/heckler.png`),
             iconUrl: require(`../assets/heckler.png`),
