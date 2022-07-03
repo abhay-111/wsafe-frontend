@@ -11,7 +11,9 @@
 </p>
 
 <br/>
-
+<p align="center">
+  <img src="Project_snapshots/dashboard.PNG">
+</p>
 <b>
   W-Safe is a web application that helps you navigate your
                   neighbourhood that you might be visiting in the near future.
