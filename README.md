@@ -13,9 +13,14 @@
 <br/>
 
 <b>
-W-Safe provides a platform to checkout the locality you might be
-            visiting in the near future and helps you make better decision based
-            on others experiences.
+  W-Safe is a web application that helps you navigate your
+                  neighbourhood that you might be visiting in the near future.
+                  It helps the community to make a better decision about the
+                  places one might travel.
+  You can help others by marking the places where you have been
+                  to recently and experienced something which was not safe. You
+                  can select from different types of markers to provide a
+                  detailed description about that place.
   <br/>
   Link : https://wsafe-frontend.vercel.app/
   <br/>
