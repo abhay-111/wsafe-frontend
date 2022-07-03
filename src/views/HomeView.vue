@@ -120,7 +120,7 @@
           <p class="mt-5">
             W-Safe provides a platform to checkout the locality you might be
             visiting in the near future and helps you make better decision based
-            on the locality and others experiences.
+            on others experiences.
           </p>
         </div>
       </v-col>

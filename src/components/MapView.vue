@@ -98,8 +98,8 @@ export default {
     defaultLocation: {
       type: Object,
       default: () => ({
-        lat: 8.9806,
-        lng: 38.7578,
+        lat: 28.566547327321654,
+        lng: 77.38246147950397,
       }),
     },
     markers: {
@@ -134,7 +134,7 @@ export default {
         color: "red",
       },
       currentPosition: [],
-      zoom: 17,
+      zoom: 16,
       dragging: false,
       viewMode: false,
       isPlacing: false,

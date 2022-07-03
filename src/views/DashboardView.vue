@@ -93,8 +93,8 @@
 
             <v-stepper-items>
               <v-stepper-content step="1">
-                <v-card class="mb-12" color="grey lighten-1" height="200px">
-                  <v-img height="200" src="../assets/stepper1.png"></v-img>
+                <v-card class="mb-12" color="grey lighten-1" height="250px">
+                  <v-img height="250" src="../assets/stepper1.png"></v-img>
                 </v-card>
                 <p>
                   W-Safe is a web application that helps you navigate your
@@ -107,8 +107,8 @@
               </v-stepper-content>
 
               <v-stepper-content step="2">
-                <v-card class="mb-12" color="grey lighten-1" height="200px">
-                  <v-img height="200" src="../assets/stepper2.png"></v-img>
+                <v-card class="mb-12" color="grey lighten-1" height="250px">
+                  <v-img height="250" src="../assets/stepper2.png"></v-img>
                 </v-card>
                 <p>
                   You can help others by marking the places where you have been
@@ -124,16 +124,12 @@
 
               <v-stepper-content step="3">
                 <v-row justify="center" align="center" class="mb-5">
-                  <video
-                    height="200px"
-                    width="300px"
-                    controls
-                    autoplay
-                    src="../assets/demo1.mp4"
-                  ></video>
+                  <v-card class="mb-12" color="grey lighten-1" height="250px">
+                    <v-img height="250" src="../assets/stepper3.png"></v-img>
+                  </v-card>
                 </v-row>
                 <p>
-                  Just double click on the location to place the marker onto the
+                  Just double click on the location to place the marker on the
                   map and fill out an easy form to add information .
                   <strong> And thats it!! . </strong>
                 </p>
@@ -312,7 +308,8 @@ export default {
     cancelDialog(id) {
       this.markerDialog = false;
       if (id === 2) {
-        this.$refs.map.position = {};
+        this.$refs.map.isPlacing = false;
+        this.markerDialog = false;
       }
     },
     logout() {
