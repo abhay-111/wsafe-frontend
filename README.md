@@ -17,7 +17,7 @@ W-Safe provides a platform to checkout the locality you might be
             visiting in the near future and helps you make better decision based
             on others experiences.
   <br/>
-  Link : [https://internbazaar.web.app](https://wsafe-frontend.vercel.app/)
+  Link : https://wsafe-frontend.vercel.app/
   <br/>
 Test UserId :admin@admin.com
   <br/>
