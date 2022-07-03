@@ -34,66 +34,43 @@ Password    :admin123
 
 * ### Landing Page ### 
 <p align="center">
-  <img src="Project_Images_Interbazaar/home.PNG">
+  <img src="Project_snapshots/Home.PNG">
   <h5>Landing Page</h5>
-  <img src="Project_Images_Interbazaar/home2.PNG">
+  <img src="Project_snapshots/Login.PNG">
 </p>
 
 * ### Login ###
 <p align="center">
-  <img src="Project_Images_Interbazaar/login.PNG">
+  <img src="Project_snapshots/Login.PNG">
 </p>
 
-* ### Listed Interships ###
+* ### Forgot Password ###
 <p align="center">
-  <img src="Project_Images_Interbazaar/searchInternship.PNG">
+  <img src="Project_snapshots/forgotpassword.PNG">
 </p>
 
-* ### Internship Detail ###
+* ### OTP Verification ###
 <p align="center">
-  <img src="Project_Images_Interbazaar/intershipdetail.PNG">
+  <img src="Project_snapshots/otpVerification.PNG">
 </p>
 
-* ### Profile Details ###
-<p align="center">
-<img src="Project_Images_Interbazaar/UserProfile.PNG">
-</p>
-
-* ### Create Resume ###
-<p align="center">
-  <img src="Project_Images_Interbazaar/editresume.PNG">
-</p>
-
-* ### Your Applications ###
-<p align="center">
-  <img src="Project_Images_Interbazaar/myapplication.PNG">
-</p>
-
-
-* ### Saved For Later Internships ###
-<p align="center">
-  <img src="Project_Images_Interbazaar/savedInternship.PNG">
-</p>
-
-* ### Change Password ###
-<p align="center">
-  <img src="Project_Images_Interbazaar/changepass.PNG">
-</p>
-
-
-
-## Screens for Corporate-role
+## Screens for Dashboard
 
 * ### List Your Event ### 
 <p align="center">
-  <img src="Project_Images/listevent.PNG">
+  <img src="Project_snapshots/dashboard.PNG">
 </p>
-
-* ### Your Events ###
 <p align="center">
-  <img src="Project_Images/yourevent.PNG">
+  <img src="Project_snapshots/dashboard2.PNG">
 </p>
-
+* ### Add Marker ### 
+<p align="center">
+  <img src="Project_snapshots/addmarker.PNG">
+</p>
+* ### Your Marker ### 
+<p align="center">
+  <img src="Project_snapshots/yourmarkers.PNG">
+</p>
 
 ## Project setup
 ```
