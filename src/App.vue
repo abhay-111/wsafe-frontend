@@ -1,9 +1,5 @@
 <template>
-  <v-app>
-    <v-main class="red accent-3">
-      <router-view />
-    </v-main>
-  </v-app>
+  <router-view />
 </template>
 
 <script>

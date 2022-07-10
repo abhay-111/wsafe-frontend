@@ -145,7 +145,7 @@ export default new Vuex.Store({
       return new Promise((resolve, reject) => {
         axios({
           method: "POST",
-          url: `${BASE_URL}user/addMarker`,
+          url: `${BASE_URL}mark/addMarker`,
           data: data,
         })
           .then((res) => {
@@ -166,7 +166,7 @@ export default new Vuex.Store({
       return new Promise((resolve, reject) => {
         axios({
           method: "GET",
-          url: `${BASE_URL}user/getAllMarkers`,
+          url: `${BASE_URL}mark/getAllMarkers`,
         })
           .then((res) => {
             console.log(res);
@@ -186,7 +186,7 @@ export default new Vuex.Store({
       return new Promise((resolve, reject) => {
         axios({
           method: "DELETE",
-          url: `${BASE_URL}user/deleteMarker/${data}`,
+          url: `${BASE_URL}mark/deleteMarker/${data}`,
         })
           .then((res) => {
             console.log(res);

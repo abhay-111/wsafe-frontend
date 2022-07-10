@@ -61,10 +61,15 @@
         <v-img height="50px" width="50px" src="../assets/W-safe.png"> </v-img>
       </v-app-bar-nav-icon>
       <h2 class="ml-3">W-Safe</h2>
-    </v-app-bar>
+      <v-spacer></v-spacer>
 
-    <!-- Sizes your content based upon application components -->
-    <v-main class="ma-0 pa-0">
+      <v-checkbox
+        v-model="collapseOnScroll"
+        color="white"
+        hide-details
+      ></v-checkbox>
+    </v-app-bar>
+    <v-main>
       <v-dialog
         :hide-overlay="true"
         v-model="dialog"
@@ -191,13 +196,11 @@
           </v-card>
         </v-form>
       </v-dialog>
-      <!-- Provides the application the proper gutter -->
-      <!-- If using vue-router -->
       <keep-alive>
         <v-container
           fluid
           class="ma-0 pa-0 grey lighten-5"
-          style="height: 86vh"
+          style="height: 100%"
         >
           <component
             ref="map"
@@ -209,7 +212,6 @@
         </v-container>
       </keep-alive>
     </v-main>
-
     <v-footer color="red accent-3 text-white" app>
       <!-- -->
       <v-row align="center" justify="center">
@@ -227,10 +229,12 @@
 import Cookie from "js-cookie";
 import MapComponent from "../components/MapView.vue";
 import getAllMarkers from "../components/AllMarkers.vue";
+import yourFriends from "../components/YourFriends.vue";
 export default {
   components: {
     MapComponent,
     getAllMarkers,
+    yourFriends,
   },
   mounted() {
     if (Cookie.get("access-token") == undefined) {
@@ -259,6 +263,7 @@ export default {
           value: "MapComponent",
         },
         { title: "Your Flags", icon: "mdi-image", value: "getAllMarkers" },
+        { title: "Your Friends", icon: "mdi-account", value: "yourFriends" },
       ],
       right: null,
       current: "MapComponent",

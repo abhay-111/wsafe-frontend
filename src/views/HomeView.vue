@@ -1,199 +1,222 @@
 <template>
-  <v-container class="text-white fill-height">
-    <v-dialog
-      :hide-overlay="true"
-      v-model="otpDialog"
-      transition="dialog-bottom-transition"
-      max-width="500"
-      :persistent="true"
-    >
-      <v-card class="pa-5">
-        <v-card-title>
-          <h4>Enter your OTP</h4>
-        </v-card-title>
-        <v-card-text>
-          <strong
-            >Otp sent at
-            {{ registerUser.email || loginUser.email || forgotEmail }}</strong
-          >
-          <div class="conatiner" style="max-width: 300px">
-            <v-otp-input v-model="otp" length="6" class="mt-3"></v-otp-input>
-            <p v-if="otpTimeout">
-              Otp not recieved ?
-              <span>
-                <v-btn x-small text @click="resendOtp" class="error"
-                  >Resend OTP</v-btn
+  <v-app>
+    <v-main class="red accent-3">
+      <v-container class="text-white fill-height">
+        <v-dialog
+          :hide-overlay="true"
+          v-model="otpDialog"
+          transition="dialog-bottom-transition"
+          max-width="500"
+          :persistent="true"
+        >
+          <v-card class="pa-5">
+            <v-card-title>
+              <h4>Enter your OTP</h4>
+            </v-card-title>
+            <v-card-text>
+              <strong
+                >Otp sent at
+                {{
+                  registerUser.email || loginUser.email || forgotEmail
+                }}</strong
+              >
+              <div class="conatiner" style="max-width: 300px">
+                <v-otp-input
+                  v-model="otp"
+                  length="6"
+                  class="mt-3"
+                ></v-otp-input>
+                <p v-if="otpTimeout">
+                  Otp not recieved ?
+                  <span>
+                    <v-btn x-small text @click="resendOtp" class="error"
+                      >Resend OTP</v-btn
+                    >
+                  </span>
+                </p>
+                <p v-else>Otp valid for next {{ otpTimer }} sec.</p>
+                <v-btn
+                  class="error mt-3"
+                  @click="verifyOtp()"
+                  :disabled="!isActive"
+                  >Verify OTP</v-btn
                 >
-              </span>
-            </p>
-            <p v-else>Otp valid for next {{ otpTimer }} sec.</p>
-            <v-btn class="error mt-3" @click="verifyOtp()" :disabled="!isActive"
-              >Verify OTP</v-btn
-            >
-          </div>
-        </v-card-text>
-      </v-card>
-    </v-dialog>
-    <v-dialog
-      :hide-overlay="true"
-      v-model="forgotPasswordDialog"
-      transition="dialog-bottom-transition"
-      max-width="500"
-      :persistent="false"
-    >
-      <v-card class="pa-5">
-        <v-card-title>
-          <h4>Enter your registered Email</h4>
-        </v-card-title>
-        <v-card-text>
-          <div class="conatiner" style="max-width: 300px">
-            <v-text-field
-              v-model="forgotEmail"
-              prepend-icon="mdi-email"
-              hint="Enter your email."
-              :rules="emailRules"
-              label="Email"
-            ></v-text-field>
-            <br />
-            <v-btn small class="error mt-3" @click="sendForgotPasswordMail"
-              >Send Resest OTP</v-btn
-            >
-          </div>
-        </v-card-text>
-      </v-card>
-    </v-dialog>
-    <v-dialog
-      :hide-overlay="true"
-      v-model="setNewPassword"
-      transition="dialog-bottom-transition"
-      max-width="500"
-      :persistent="true"
-    >
-      <v-card class="pa-5">
-        <v-card-title>
-          <h4>Create New Password</h4>
-        </v-card-title>
-        <v-card-text>
-          <div class="conatiner" style="max-width: 300px">
-            <v-text-field
-              v-model="changePassword.password"
-              :rules="passwordRules"
-              label="Password"
-              type="password"
-              required
-            ></v-text-field>
-            <v-text-field
-              v-model="changePassword.confirmPassword"
-              :rules="passwordRules"
-              label="Confirm Password"
-              type="password"
-              required
-            ></v-text-field>
-            <br />
-            <v-btn small class="error mt-3" @click="createNewPassword"
-              >Create New Password</v-btn
-            >
-          </div>
-        </v-card-text>
-      </v-card>
-    </v-dialog>
-    <v-snackbar v-model="snackbar" :timeout="timeout">
-      {{ errorText }}
-
-      <template v-slot:action="{ attrs }">
-        <v-btn color="blue" v-bind="attrs" @click="snackbar = false">
-          Close
-        </v-btn>
-      </template>
-    </v-snackbar>
-    <v-row class="py-5 px-15">
-      <v-col cols="12">
-        <div class="d-flex justify-center align-items-center">
-          <img src="../assets/W-safewhite.png" height="150px" alt="" />
-        </div>
-      </v-col>
-      <v-col xs="12" sm="12" md="6">
-        <div class="container">
-          <h1>Check before you leave.</h1>
-          <h1>Be safe.</h1>
-          <h1>Help Others.</h1>
-          <p class="mt-5">
-            W-Safe provides a platform to checkout the locality you might be
-            visiting in the near future and helps you make better decision based
-            on others experiences.
-          </p>
-        </div>
-      </v-col>
-      <v-col xs="12" sm="12" md="6">
-        <div class="pa-5">
-          <v-card class="pa-10" max-width="30rem" max-height="25rem">
-            <v-form v-if="isLogin" ref="form">
-              <v-text-field
-                v-model="loginUser.email"
-                label="E-mail"
-                :rules="emailRules"
-                required
-              ></v-text-field>
-              <v-text-field
-                v-model="loginUser.password"
-                :rules="passwordRules"
-                label="Password"
-                type="password"
-                required
-              ></v-text-field>
-              <div>
-                <p class="caption">
-                  Forgot Password
-                  <v-btn text x-small color="error" @click="forgotPassword"
-                    >Forgot Password</v-btn
-                  >
-                </p>
-                <p class="caption">
-                  Dont have an account ?
-                  <v-btn color="error" text x-small @click="isLogin = !isLogin">
-                    Register</v-btn
-                  >
-                </p>
               </div>
-              <v-btn color="error" @click="login" class="mr-4 mt-2">
-                Login
-              </v-btn>
-            </v-form>
-            <v-form v-else ref="form" lazy-validation>
-              <v-text-field
-                v-model="registerUser.name"
-                :rules="nameRules"
-                label="Name"
-                required
-              ></v-text-field>
-              <v-text-field
-                v-model="registerUser.email"
-                :rules="emailRules"
-                label="E-mail"
-                required
-              ></v-text-field>
-              <v-text-field
-                v-model="registerUser.password"
-                :rules="passwordRules"
-                type="password"
-                label="Password"
-                required
-              ></v-text-field>
-              <p class="caption">
-                Already have an account ?
-                <v-btn color="error" text x-small @click="isLogin = !isLogin">
-                  Login</v-btn
-                >
-              </p>
-              <v-btn color="error" class="mr-4 mt-2" @click="register">
-                Register
-              </v-btn>
-            </v-form>
+            </v-card-text>
           </v-card>
-        </div>
-      </v-col>
-    </v-row>
-  </v-container>
+        </v-dialog>
+        <v-dialog
+          :hide-overlay="true"
+          v-model="forgotPasswordDialog"
+          transition="dialog-bottom-transition"
+          max-width="500"
+          :persistent="false"
+        >
+          <v-card class="pa-5">
+            <v-card-title>
+              <h4>Enter your registered Email</h4>
+            </v-card-title>
+            <v-card-text>
+              <div class="conatiner" style="max-width: 300px">
+                <v-text-field
+                  v-model="forgotEmail"
+                  prepend-icon="mdi-email"
+                  hint="Enter your email."
+                  :rules="emailRules"
+                  label="Email"
+                ></v-text-field>
+                <br />
+                <v-btn small class="error mt-3" @click="sendForgotPasswordMail"
+                  >Send Resest OTP</v-btn
+                >
+              </div>
+            </v-card-text>
+          </v-card>
+        </v-dialog>
+        <v-dialog
+          :hide-overlay="true"
+          v-model="setNewPassword"
+          transition="dialog-bottom-transition"
+          max-width="500"
+          :persistent="true"
+        >
+          <v-card class="pa-5">
+            <v-card-title>
+              <h4>Create New Password</h4>
+            </v-card-title>
+            <v-card-text>
+              <div class="conatiner" style="max-width: 300px">
+                <v-text-field
+                  v-model="changePassword.password"
+                  :rules="passwordRules"
+                  label="Password"
+                  type="password"
+                  required
+                ></v-text-field>
+                <v-text-field
+                  v-model="changePassword.confirmPassword"
+                  :rules="passwordRules"
+                  label="Confirm Password"
+                  type="password"
+                  required
+                ></v-text-field>
+                <br />
+                <v-btn small class="error mt-3" @click="createNewPassword"
+                  >Create New Password</v-btn
+                >
+              </div>
+            </v-card-text>
+          </v-card>
+        </v-dialog>
+        <v-snackbar v-model="snackbar" :timeout="timeout">
+          {{ errorText }}
+
+          <template v-slot:action="{ attrs }">
+            <v-btn color="blue" v-bind="attrs" @click="snackbar = false">
+              Close
+            </v-btn>
+          </template>
+        </v-snackbar>
+        <v-row class="py-5 px-15">
+          <v-col cols="12">
+            <div class="d-flex justify-center align-items-center">
+              <img src="../assets/W-safewhite.png" height="150px" alt="" />
+            </div>
+          </v-col>
+          <v-col xs="12" sm="12" md="6">
+            <div class="container">
+              <h1>Check before you leave.</h1>
+              <h1>Be safe.</h1>
+              <h1>Help Others.</h1>
+              <p class="mt-5">
+                W-Safe provides a platform to checkout the locality you might be
+                visiting in the near future and helps you make better decision
+                based on others experiences.
+              </p>
+            </div>
+          </v-col>
+          <v-col xs="12" sm="12" md="6">
+            <div class="pa-5">
+              <v-card class="pa-10" max-width="30rem" max-height="25rem">
+                <v-form v-if="isLogin" ref="form">
+                  <v-text-field
+                    v-model="loginUser.email"
+                    label="E-mail"
+                    :rules="emailRules"
+                    required
+                  ></v-text-field>
+                  <v-text-field
+                    v-model="loginUser.password"
+                    :rules="passwordRules"
+                    label="Password"
+                    type="password"
+                    required
+                  ></v-text-field>
+                  <div>
+                    <p class="caption">
+                      Forgot Password
+                      <v-btn text x-small color="error" @click="forgotPassword"
+                        >Forgot Password</v-btn
+                      >
+                    </p>
+                    <p class="caption">
+                      Dont have an account ?
+                      <v-btn
+                        color="error"
+                        text
+                        x-small
+                        @click="isLogin = !isLogin"
+                      >
+                        Register</v-btn
+                      >
+                    </p>
+                  </div>
+                  <v-btn color="error" @click="login" class="mr-4 mt-2">
+                    Login
+                  </v-btn>
+                </v-form>
+                <v-form v-else ref="form" lazy-validation>
+                  <v-text-field
+                    v-model="registerUser.name"
+                    :rules="nameRules"
+                    label="Name"
+                    required
+                  ></v-text-field>
+                  <v-text-field
+                    v-model="registerUser.email"
+                    :rules="emailRules"
+                    label="E-mail"
+                    required
+                  ></v-text-field>
+                  <v-text-field
+                    v-model="registerUser.password"
+                    :rules="passwordRules"
+                    type="password"
+                    label="Password"
+                    required
+                  ></v-text-field>
+                  <p class="caption">
+                    Already have an account ?
+                    <v-btn
+                      color="error"
+                      text
+                      x-small
+                      @click="isLogin = !isLogin"
+                    >
+                      Login</v-btn
+                    >
+                  </p>
+                  <v-btn color="error" class="mr-4 mt-2" @click="register">
+                    Register
+                  </v-btn>
+                </v-form>
+              </v-card>
+            </div>
+          </v-col>
+        </v-row>
+      </v-container>
+    </v-main>
+  </v-app>
 </template>
 
 <script>
