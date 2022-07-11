@@ -1,62 +1,100 @@
 <template>
-  <v-container fluid class="pa-3">
-    <v-autocomplete
-      v-model="model"
-      :items="items"
-      :loading="isLoading"
-      :search-input.sync="search"
-      color="white"
-      hide-no-data
-      hide-selected
-      item-text="Description"
-      item-value="API"
-      label="Search User to add as a friend"
-      placeholder="Start typing to Search"
-      prepend-icon="mdi-account"
-      return-object
-    ></v-autocomplete>
-    <v-expand-transition>
-      <v-list v-if="model" class="">
-        <v-list-item v-for="(field, i) in fields" class="mt-2" :key="i">
+  <v-container class="pa-5">
+    <v-snackbar v-model="snackbar">
+      {{ errorText }}
+      <template v-slot:action="{ attrs }">
+        <v-btn color="pink" text v-bind="attrs" @click="snackbar = false">
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
+    <v-container>
+      <v-autocomplete
+        v-model="model"
+        :items="items"
+        :loading="isLoading"
+        :search-input.sync="search"
+        color="white"
+        hide-no-data
+        hide-selected
+        item-text="description"
+        item-value="API"
+        label="Search User to add as a friend"
+        placeholder="Start typing to Search"
+        prepend-icon="mdi-account"
+        return-object
+      ></v-autocomplete>
+      <v-expand-transition>
+        <v-list v-if="model">
+          <v-list-item class="mt-2">
+            <v-list-item-content>
+              <v-list-item-title v-text="model.name"></v-list-item-title>
+              <v-list-item-subtitle v-text="model.email"></v-list-item-subtitle>
+            </v-list-item-content>
+            <v-list-item-action>
+              <v-btn x-small color="error" @click="sendFriendRequest"
+                >Add friend</v-btn
+              >
+            </v-list-item-action>
+          </v-list-item>
+        </v-list>
+      </v-expand-transition>
+    </v-container>
+    <v-container>
+      <v-list v-if="getFriends.length > 0">
+        <v-list-item v-for="friend in getFriends" :key="friend._id">
           <v-list-item-content>
-            <v-list-item-title v-text="field.value"></v-list-item-title>
-            <v-list-item-subtitle v-text="field.key"></v-list-item-subtitle>
+            <v-list-item-title> {{ friend.friendName }} </v-list-item-title>
+            <v-list-item-subtitle>
+              {{ friend.friendEmail }}
+            </v-list-item-subtitle>
           </v-list-item-content>
           <v-list-item-action>
-            <v-btn x-small color="error">Add friend</v-btn>
+            <v-btn class="ml-5" @click="removeFriend(friend.friendId)" icon>
+              <v-icon color="grey lighten-1">mdi-delete</v-icon>
+            </v-btn>
           </v-list-item-action>
         </v-list-item>
       </v-list>
-    </v-expand-transition>
+    </v-container>
   </v-container>
 </template>
 
 <script>
 import axios from "axios";
+import Cookie from "js-cookie";
 export default {
   data: () => ({
-    descriptionLimit: 30,
+    descriptionLimit: 50,
     entries: [],
     isLoading: false,
     model: null,
     search: null,
+    friends: null,
+    snackbar: false,
+    errorText: "",
   }),
-
+  mounted() {
+    this.$store.dispatch("getAllFriends").then((res) => {
+      console.log(res);
+      this.friends = res.data.friends;
+      console.log(this.friends);
+    });
+  },
   computed: {
     fields() {
       if (!this.model) return [];
 
-      return Object.keys(this.model).map((key) => {
-        return {
-          key,
-          value: this.model[key] || "n/a",
-        };
-      });
+      return this.model;
     },
     items() {
       return this.entries.map((ele) => {
-        return ele.name + " - " + ele.email;
+        const description = ele.name + " - " + ele.email;
+        return Object.assign({}, ele, { description });
       });
+    },
+    getFriends() {
+      return this.friends;
     },
   },
 
@@ -73,7 +111,7 @@ export default {
 
       // Lazily load input items
       axios
-        .get(`http://localhost:8000/user/getUsers?search=${val}`)
+        .get(`http://localhost:8000/user/getUsers/${Cookie.get("userId")}`)
         .then((res) => {
           console.log(res);
           const { count, users } = res.data;
@@ -84,6 +122,27 @@ export default {
           console.log(err);
         })
         .finally(() => (this.isLoading = false));
+    },
+  },
+  methods: {
+    sendFriendRequest() {
+      this.$store
+        .dispatch("sendFriendRequest", this.model.description)
+        .then(() => {
+          console.log("request sent");
+          this.model = null;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    removeFriend(id) {
+      console.log(id);
+      this.$store.dispatch("removeFriend", id).then(() => {
+        this.$store.dispatch("getAllFriends").then((res) => {
+          this.friends = res.data.friends;
+        });
+      });
     },
   },
 };

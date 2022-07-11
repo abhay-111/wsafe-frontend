@@ -3,7 +3,7 @@ import Vuex from "vuex";
 import axios from "axios";
 import Cookie from "js-cookie";
 Vue.use(Vuex);
-const BASE_URL = "https://intense-savannah-60242.herokuapp.com/";
+const BASE_URL = "http://localhost:8000/";
 export default new Vuex.Store({
   state: {},
   mutations: {},
@@ -191,6 +191,131 @@ export default new Vuex.Store({
           .then((res) => {
             console.log(res);
             if (res.status == 204) {
+              resolve(res);
+            } else {
+              reject(res);
+            }
+          })
+          .catch((err) => {
+            reject(err);
+          });
+      });
+    },
+    sendFriendRequest(state, data) {
+      const payload = {
+        from: Cookie.get("name"),
+        to: data,
+        userId: Cookie.get("userId"),
+      };
+      return new Promise((resolve, reject) => {
+        axios({
+          method: "POST",
+          url: `${BASE_URL}user/sendFriendRequest/${Cookie.get("userId")}`,
+          data: payload,
+        })
+          .then((res) => {
+            console.log(res);
+            if (res.status == 200) {
+              resolve(res);
+            } else {
+              reject(res);
+            }
+          })
+          .catch((err) => {
+            reject(err);
+          });
+      });
+    },
+    getAllFreindRequests() {
+      return new Promise((resolve, reject) => {
+        axios({
+          method: "GET",
+          url: `${BASE_URL}user/getAllFreindRequests/${Cookie.get("userId")}`,
+        })
+          .then((res) => {
+            console.log(res);
+            if (res.status == 200) {
+              resolve(res);
+            } else {
+              reject(res);
+            }
+          })
+          .catch((err) => {
+            reject(err);
+          });
+      });
+    },
+    acceptFriendRequest(state, senderId) {
+      console.log(senderId);
+      return new Promise((resolve, reject) => {
+        axios({
+          method: "GET",
+          url: `${BASE_URL}user/acceptFriendRequest/${Cookie.get(
+            "userId"
+          )}/${senderId}`,
+        })
+          .then((res) => {
+            console.log(res);
+            if (res.status == 200) {
+              resolve(res);
+            } else {
+              reject(res);
+            }
+          })
+          .catch((err) => {
+            reject(err);
+          });
+      });
+    },
+    rejectFriendRequest(state, senderId) {
+      return new Promise((resolve, reject) => {
+        axios({
+          method: "GET",
+          url: `${BASE_URL}user/rejectFriendRequest/${Cookie.get(
+            "userId"
+          )}/${senderId}`,
+        })
+          .then((res) => {
+            console.log(res);
+            if (res.status == 200) {
+              resolve(res);
+            } else {
+              reject(res);
+            }
+          })
+          .catch((err) => {
+            reject(err);
+          });
+      });
+    },
+    getAllFriends() {
+      return new Promise((resolve, reject) => {
+        axios({
+          method: "GET",
+          url: `${BASE_URL}user/getAllFriends/${Cookie.get("userId")}`,
+        })
+          .then((res) => {
+            console.log(res);
+            if (res.status == 200) {
+              resolve(res);
+            } else {
+              reject(res);
+            }
+          })
+          .catch((err) => {
+            reject(err);
+          });
+      });
+    },
+    removeFriend(state, id) {
+      return new Promise((resolve, reject) => {
+        axios({
+          method: "GET",
+          url: `${BASE_URL}user/removeFriend/${Cookie.get("userId")}/${id}`,
+        })
+          .then((res) => {
+            console.log(res);
+            if (res.status == 200) {
               resolve(res);
             } else {
               reject(res);
