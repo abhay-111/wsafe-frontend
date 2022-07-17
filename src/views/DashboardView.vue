@@ -423,6 +423,9 @@ export default {
       this.$store.dispatch("rejectFriendRequest", senderId).then(() => {
         this.$store.dispatch("getAllFreindRequests").then((data) => {
           this.friendRequests = data.data.data;
+          if (this.friendRequests.length == 0) {
+            this.friendRequestModal = false;
+          }
         });
       });
     },
@@ -431,6 +434,9 @@ export default {
       this.$store.dispatch("acceptFriendRequest", senderId).then(() => {
         this.$store.dispatch("getAllFreindRequests").then((data) => {
           this.friendRequests = data.data.data;
+          if (this.friendRequests.length == 0) {
+            this.friendRequestModal = false;
+          }
         });
       });
     },

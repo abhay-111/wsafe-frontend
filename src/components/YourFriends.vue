@@ -44,7 +44,7 @@
       </v-expand-transition>
     </v-container>
     <v-container>
-      <h4>Existing Friends</h4>
+      <h4>Existing Friends ({{ getFriends.length }})</h4>
 
       <v-list class="mt-3" v-if="getFriends.length > 0">
         <v-list-item v-for="friend in getFriends" :key="friend._id">
@@ -61,6 +61,9 @@
           </v-list-item-action>
         </v-list-item>
       </v-list>
+      <v-container v-else>
+        Add your friends and see their last active location on your map.
+      </v-container>
     </v-container>
   </v-container>
 </template>

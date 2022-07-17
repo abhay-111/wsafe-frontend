@@ -58,7 +58,7 @@
     >
       <l-popup>
         <div>
-          <strong> {{ mark.friendName }}</strong>
+          <strong> {{ mark.friendName }} was here </strong>
           <br />
           <span>{{ mark.friendEmail }}</span>
         </div>
