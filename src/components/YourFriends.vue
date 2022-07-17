@@ -116,7 +116,11 @@ export default {
 
       // Lazily load input items
       axios
-        .get(`http://localhost:8000/user/getUsers/${Cookie.get("userId")}`)
+        .get(
+          `https://intense-savannah-60242.herokuapp.com/user/getUsers/${Cookie.get(
+            "userId"
+          )}`
+        )
         .then((res) => {
           console.log(res);
           const { count, users } = res.data;
