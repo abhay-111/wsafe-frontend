@@ -1,5 +1,6 @@
 <template>
   <v-container class="pa-5">
+    <h1>Your Friends</h1>
     <v-snackbar v-model="snackbar">
       {{ errorText }}
       <template v-slot:action="{ attrs }">
@@ -9,6 +10,7 @@
       </template>
     </v-snackbar>
     <v-container>
+      <h4>Add a new friend</h4>
       <v-autocomplete
         v-model="model"
         :items="items"
@@ -23,6 +25,7 @@
         placeholder="Start typing to Search"
         prepend-icon="mdi-account"
         return-object
+        class="mt-3"
       ></v-autocomplete>
       <v-expand-transition>
         <v-list v-if="model">
@@ -41,7 +44,9 @@
       </v-expand-transition>
     </v-container>
     <v-container>
-      <v-list v-if="getFriends.length > 0">
+      <h4>Existing Friends</h4>
+
+      <v-list class="mt-3" v-if="getFriends.length > 0">
         <v-list-item v-for="friend in getFriends" :key="friend._id">
           <v-list-item-content>
             <v-list-item-title> {{ friend.friendName }} </v-list-item-title>
@@ -100,8 +105,8 @@ export default {
 
   watch: {
     search(val) {
-      // Items have already been loaded
       console.log(val);
+      // Items have already been loaded
       if (this.items.length > 0) return;
 
       // Items have already been requested
@@ -129,11 +134,14 @@ export default {
       this.$store
         .dispatch("sendFriendRequest", this.model.description)
         .then(() => {
-          console.log("request sent");
+          console.log("heww");
+          this.snackbar = true;
+          this.errorText = "Friend Request sent";
           this.model = null;
         })
         .catch((err) => {
-          console.log(err);
+          this.snackbar = true;
+          this.errorText = err.response.data.error.message;
         });
     },
     removeFriend(id) {

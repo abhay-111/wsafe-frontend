@@ -284,6 +284,7 @@ export default new Vuex.Store({
             }
           })
           .catch((err) => {
+            console.log(err);
             reject(err);
           });
       });
@@ -315,6 +316,26 @@ export default new Vuex.Store({
         })
           .then((res) => {
             console.log(res);
+            if (res.status == 200) {
+              resolve(res);
+            } else {
+              reject(res);
+            }
+          })
+          .catch((err) => {
+            reject(err);
+          });
+      });
+    },
+    setCurrentLocation(state, data) {
+      data["userId"] = Cookie.get("userId");
+      return new Promise((resolve, reject) => {
+        axios({
+          url: `${BASE_URL}user/setCurrentUserLocation`,
+          method: "POST",
+          data: data,
+        })
+          .then((res) => {
             if (res.status == 200) {
               resolve(res);
             } else {

@@ -264,6 +264,7 @@
             @mark="markFlag"
             @delete-marker="deleteMarker"
             :markers="markers"
+            :friends="friends"
             :is="current"
           ></component>
         </v-container>
@@ -309,6 +310,13 @@ export default {
         this.$store.dispatch("getAllFreindRequests").then((data) => {
           this.friendRequests = data.data.data;
         });
+      })
+      .then(() => {
+        this.$store.dispatch("getAllFriends").then((data) => {
+          console.log(data);
+          this.friends = data.data.friends;
+          console.log("friends", this.friends);
+        });
       });
   },
   data() {
@@ -346,6 +354,7 @@ export default {
       markers: null,
       friendRequestModal: false,
       friendRequests: [],
+      friends: null,
     };
   },
   computed: {
