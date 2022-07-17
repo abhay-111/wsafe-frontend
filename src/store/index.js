@@ -296,7 +296,6 @@ export default new Vuex.Store({
           url: `${BASE_URL}user/getAllFriends/${Cookie.get("userId")}`,
         })
           .then((res) => {
-            console.log(res);
             if (res.status == 200) {
               resolve(res);
             } else {
