@@ -49,10 +49,20 @@
           <span>{{ mark.description }}</span>
         </div>
       </l-popup>
-      <!-- <l-tooltip
-        :content="getMarkerTag(mark.tag)"
-        :options="{ permanent: true }"
-      /> -->
+    </l-marker>
+    <l-marker
+      v-for="mark in friends"
+      :key="mark.friendName"
+      :icon="icon"
+      :lat-lng="[mark.friendLocation.latitude, mark.friendLocation.longitude]"
+    >
+      <l-popup>
+        <div>
+          <strong> {{ mark.friendName }}</strong>
+          <br />
+          <span>{{ mark.friendEmail }}</span>
+        </div>
+      </l-popup>
     </l-marker>
     <l-marker
       :icon="icon"
@@ -106,6 +116,10 @@ export default {
       type: Array,
       required: true,
     },
+    friends: {
+      type: Array,
+      required: true,
+    },
   },
   data() {
     return {
@@ -142,7 +156,6 @@ export default {
   },
   mounted() {
     this.getUserPosition();
-    console.log(this.userLocation);
     this.$refs.map.mapObject.on("geosearch/showlocation", this.onSearch);
   },
   watch: {
@@ -221,16 +234,19 @@ export default {
         // get GPS position
         navigator.geolocation.getCurrentPosition((pos) => {
           // set the user location
-          this.userLocation = {
+          const data = {
             lat: pos.coords.latitude,
             lng: pos.coords.longitude,
           };
+          this.userLocation = data;
           this.currentPosition.push(pos.coords.latitude);
           this.currentPosition.push(pos.coords.longitude);
           this.circle.center.push(pos.coords.latitude);
           this.circle.center.push(pos.coords.longitude);
-
-          console.log("abhay", this.userLocation);
+          console.log(data);
+          this.$store.dispatch("setCurrentLocation", data).then(() => {
+            console.log("location set");
+          });
         });
       }
     },

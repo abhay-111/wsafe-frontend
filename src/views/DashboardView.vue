@@ -63,13 +63,70 @@
       <h2 class="ml-3">W-Safe</h2>
       <v-spacer></v-spacer>
 
-      <v-checkbox
-        v-model="collapseOnScroll"
-        color="white"
-        hide-details
-      ></v-checkbox>
+      <v-badge
+        color="blue"
+        v-if="friendRequests.length > 0"
+        :content="friendRequests.length"
+        :value="friendRequests.length"
+        overlap
+      >
+        <v-btn @click="setFriendRequestModal" text color="error">
+          <v-icon>mdi-account</v-icon>
+        </v-btn>
+      </v-badge>
     </v-app-bar>
     <v-main>
+      <v-dialog
+        :hide-overlay="true"
+        v-model="friendRequestModal"
+        transition="dialog-bottom-transition"
+        max-width="500"
+      >
+        <v-card class="pa-5">
+          <v-card-title>
+            <h4>Pending Friend Requests</h4>
+          </v-card-title>
+          <v-card-text>
+            <v-list>
+              <v-list-item
+                v-for="request in getfriendRequests"
+                :key="request.senderId"
+              >
+                <v-list-item-avatar>
+                  <v-icon class="grey lighten-1" dark> mdi-account </v-icon>
+                </v-list-item-avatar>
+
+                <v-list-item-content>
+                  <v-list-item-title
+                    v-text="request.senderName"
+                  ></v-list-item-title>
+
+                  <v-list-item-subtitle> Abhay </v-list-item-subtitle>
+                </v-list-item-content>
+
+                <v-list-item-action>
+                  <span
+                    ><v-btn
+                      class="ml-5"
+                      @click="rejectRequest(request.senderId)"
+                      icon
+                    >
+                      <v-icon color="error lighten-1">mdi-close</v-icon>
+                    </v-btn>
+                    <v-btn
+                      class="ml-5"
+                      @click="acceptRequest(request.senderId)"
+                      icon
+                    >
+                      <v-icon color="green lighten-1">mdi-check</v-icon>
+                    </v-btn>
+                  </span>
+                </v-list-item-action>
+              </v-list-item>
+            </v-list>
+          </v-card-text>
+        </v-card>
+      </v-dialog>
       <v-dialog
         :hide-overlay="true"
         v-model="dialog"
@@ -207,6 +264,7 @@
             @mark="markFlag"
             @delete-marker="deleteMarker"
             :markers="markers"
+            :friends="friends"
             :is="current"
           ></component>
         </v-container>
@@ -243,13 +301,27 @@ export default {
     }
     this.userData.name = Cookie.get("name");
     this.userData.email = Cookie.get("email");
-    this.$store.dispatch("getAllMarkers").then((res) => {
-      this.markers = res.data.markers;
-    });
+    this.$store
+      .dispatch("getAllMarkers")
+      .then((res) => {
+        this.markers = res.data.markers;
+      })
+      .then(() => {
+        this.$store.dispatch("getAllFreindRequests").then((data) => {
+          this.friendRequests = data.data.data;
+        });
+      })
+      .then(() => {
+        this.$store.dispatch("getAllFriends").then((data) => {
+          console.log(data);
+          this.friends = data.data.friends;
+          console.log("friends", this.friends);
+        });
+      });
   },
   data() {
     return {
-      dialog: true,
+      dialog: false,
       markerDialog: false,
       e1: 1,
       marker: {
@@ -280,7 +352,15 @@ export default {
         "Others",
       ],
       markers: null,
+      friendRequestModal: false,
+      friendRequests: [],
+      friends: null,
     };
+  },
+  computed: {
+    getfriendRequests() {
+      return this.friendRequests;
+    },
   },
   methods: {
     handle(index) {
@@ -335,6 +415,24 @@ export default {
     },
     closeHelper() {
       this.dialog = !this.dialog;
+    },
+    setFriendRequestModal() {
+      this.friendRequestModal = !this.friendRequestModal;
+    },
+    rejectRequest(senderId) {
+      this.$store.dispatch("rejectFriendRequest", senderId).then(() => {
+        this.$store.dispatch("getAllFreindRequests").then((data) => {
+          this.friendRequests = data.data.data;
+        });
+      });
+    },
+    acceptRequest(senderId) {
+      console.log(senderId);
+      this.$store.dispatch("acceptFriendRequest", senderId).then(() => {
+        this.$store.dispatch("getAllFreindRequests").then((data) => {
+          this.friendRequests = data.data.data;
+        });
+      });
     },
   },
 };
