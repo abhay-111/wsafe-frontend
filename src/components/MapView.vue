@@ -14,7 +14,7 @@
     />
     <l-geosearch :options="geoSearchOptions"></l-geosearch>
     <l-control position="bottomleft">
-      <v-btn @click="enterViewMode">
+      <v-btn @click="enterViewMode" small>
         {{ getControlButtonText }}
       </v-btn>
     </l-control>
