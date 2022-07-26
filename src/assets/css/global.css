@@ -3,9 +3,19 @@
     padding: 0%;
     box-sizing: border-box;
     font-family: 'Poppins', sans-serif;
-    word-break: break-all;
 }
 
 .text-white{
     color: white;
 }
+@media only screen and (max-width: 1000px) {
+    * {
+      font-size: 14px;
+    }
+  }
+
+  @media only screen and (max-width: 600px) {
+    * {
+      font-size: 12px;
+    }
+  }

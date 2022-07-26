@@ -117,103 +117,96 @@
             </v-btn>
           </template>
         </v-snackbar>
-        <v-row class="py-5 px-15">
-          <v-col cols="12">
+        <div class="d-flex flex-row gap-5" style="width: 100%">
+          <!-- <div class="container">
+           
+            <h2>Check before you leave.</h2>
+            <h2>Be safe.</h2>
+            <h2>Help Others.</h2>
+            <p class="mt-5">
+              W-Safe provides a platform to checkout the locality you might be
+              visiting in the near future and helps you make better decision
+              based on others experiences.
+            </p>
+          </div> -->
+          <div
+            class="container d-flex gap-5 flex-column justify-center align-items-center"
+            style="min-width: 19rem; max-width: 35rem"
+          >
             <div class="d-flex justify-center align-items-center">
-              <img src="../assets/W-safewhite.png" height="150px" alt="" />
+              <img src="../assets/W-safewhite.png" height="120px" alt="" />
             </div>
-          </v-col>
-          <v-col xs="12" sm="12" md="6">
-            <div class="container">
-              <h1>Check before you leave.</h1>
-              <h1>Be safe.</h1>
-              <h1>Help Others.</h1>
-              <p class="mt-5">
-                W-Safe provides a platform to checkout the locality you might be
-                visiting in the near future and helps you make better decision
-                based on others experiences.
-              </p>
-            </div>
-          </v-col>
-          <v-col xs="12" sm="12" md="6">
-            <div class="pa-5">
-              <v-card class="pa-10" max-width="30rem" max-height="25rem">
-                <v-form v-if="isLogin" ref="form">
-                  <v-text-field
-                    v-model="loginUser.email"
-                    label="E-mail"
-                    :rules="emailRules"
-                    required
-                  ></v-text-field>
-                  <v-text-field
-                    v-model="loginUser.password"
-                    :rules="passwordRules"
-                    label="Password"
-                    type="password"
-                    required
-                  ></v-text-field>
-                  <div>
-                    <p class="caption">
-                      Forgot Password
-                      <v-btn text x-small color="error" @click="forgotPassword"
-                        >Forgot Password</v-btn
-                      >
-                    </p>
-                    <p class="caption">
-                      Dont have an account ?
-                      <v-btn
-                        color="error"
-                        text
-                        x-small
-                        @click="isLogin = !isLogin"
-                      >
-                        Register</v-btn
-                      >
-                    </p>
-                  </div>
-                  <v-btn color="error" @click="login" class="mr-4 mt-2">
-                    Login
-                  </v-btn>
-                </v-form>
-                <v-form v-else ref="form" lazy-validation>
-                  <v-text-field
-                    v-model="registerUser.name"
-                    :rules="nameRules"
-                    label="Name"
-                    required
-                  ></v-text-field>
-                  <v-text-field
-                    v-model="registerUser.email"
-                    :rules="emailRules"
-                    label="E-mail"
-                    required
-                  ></v-text-field>
-                  <v-text-field
-                    v-model="registerUser.password"
-                    :rules="passwordRules"
-                    type="password"
-                    label="Password"
-                    required
-                  ></v-text-field>
+            <v-card class="pa-10">
+              <v-form v-if="isLogin" ref="form">
+                <v-text-field
+                  v-model="loginUser.email"
+                  label="E-mail"
+                  :rules="emailRules"
+                  required
+                ></v-text-field>
+                <v-text-field
+                  v-model="loginUser.password"
+                  :rules="passwordRules"
+                  label="Password"
+                  type="password"
+                  required
+                ></v-text-field>
+                <div>
                   <p class="caption">
-                    Already have an account ?
+                    Forgot Password
+                    <v-btn text x-small color="error" @click="forgotPassword"
+                      >Forgot Password</v-btn
+                    >
+                  </p>
+                  <p class="caption">
+                    Dont have an account ?
                     <v-btn
                       color="error"
                       text
                       x-small
                       @click="isLogin = !isLogin"
                     >
-                      Login</v-btn
+                      Register</v-btn
                     >
                   </p>
-                  <v-btn color="error" class="mr-4 mt-2" @click="register">
-                    Register
-                  </v-btn>
-                </v-form>
-              </v-card>
-            </div>
-          </v-col>
-        </v-row>
+                </div>
+                <v-btn color="error" @click="login" class="mr-4 mt-2">
+                  Login
+                </v-btn>
+              </v-form>
+              <v-form v-else ref="form" lazy-validation>
+                <v-text-field
+                  v-model="registerUser.name"
+                  :rules="nameRules"
+                  label="Name"
+                  required
+                ></v-text-field>
+                <v-text-field
+                  v-model="registerUser.email"
+                  :rules="emailRules"
+                  label="E-mail"
+                  required
+                ></v-text-field>
+                <v-text-field
+                  v-model="registerUser.password"
+                  :rules="passwordRules"
+                  type="password"
+                  label="Password"
+                  required
+                ></v-text-field>
+                <p class="caption">
+                  Already have an account ?
+                  <v-btn color="error" text x-small @click="isLogin = !isLogin">
+                    Login</v-btn
+                  >
+                </p>
+                <v-btn color="error" class="mr-4 mt-2" @click="register">
+                  Register
+                </v-btn>
+              </v-form>
+            </v-card>
+          </div>
+        </div>
       </v-container>
     </v-main>
   </v-app>
