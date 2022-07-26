@@ -1,9 +1,14 @@
 <template>
   <v-app>
-    <v-navigation-drawer app>
+    <v-navigation-drawer
+      permanent
+      :mini-variant.sync="mini"
+      expand-on-hover
+      app
+    >
       <!-- -->
       <div class="container d-flex justify-center align-center">
-        <v-avatar color="error" size="64">
+        <v-avatar color="error" size="48">
           <span class="white--text text-h5">{{
             userData.name.substring(0, 2).toUpperCase()
           }}</span>
@@ -355,6 +360,7 @@ export default {
       friendRequestModal: false,
       friendRequests: [],
       friends: null,
+      mini: true,
     };
   },
   computed: {
