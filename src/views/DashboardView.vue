@@ -1,11 +1,6 @@
 <template>
   <v-app>
-    <v-navigation-drawer
-      permanent
-      :mini-variant.sync="mini"
-      expand-on-hover
-      app
-    >
+    <v-navigation-drawer temporary v-model="drawer" app>
       <!-- -->
       <div class="container d-flex justify-center align-center">
         <v-avatar color="error" size="48">
@@ -62,6 +57,7 @@
     <v-app-bar app>
       <!-- -->
       <!-- <v-app-bar-title shrink-on-scroll> W-safe </v-app-bar-title> -->
+      <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
       <v-app-bar-nav-icon @click="gotoHome()">
         <v-img height="50px" width="50px" src="../assets/W-safe.png"> </v-img>
       </v-app-bar-nav-icon>
@@ -360,7 +356,7 @@ export default {
       friendRequestModal: false,
       friendRequests: [],
       friends: null,
-      mini: true,
+      drawer: false,
     };
   },
   computed: {
