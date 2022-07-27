@@ -19,6 +19,7 @@
       </v-btn>
     </l-control>
     <l-circle
+      v-if="getUserCircle.center[0]"
       :lat-lng="getUserCircle.center"
       :radius="getUserCircle.radius"
       :color="getUserCircle.color"
@@ -53,14 +54,14 @@
     <l-marker
       v-for="mark in friends"
       :key="mark.friendName"
-      :icon="icon"
+      :icon="friendIcon"
       :lat-lng="[mark.friendLocation.latitude, mark.friendLocation.longitude]"
     >
       <l-popup>
         <div>
           <strong> {{ mark.friendName }} was here </strong>
           <br />
-          <span>{{ mark.friendEmail }}</span>
+          <span>{{ mark.friendName }} was last active here</span>
         </div>
       </l-popup>
     </l-marker>
@@ -135,6 +136,11 @@ export default {
         iconUrl: require("leaflet/dist/images/marker-icon.png"),
         shadowUrl: require("leaflet/dist/images/marker-shadow.png"),
       }),
+      friendIcon: icon({
+        iconRetinaUrl: require("../assets/friend.png"),
+        iconUrl: require("../assets/friend.png"),
+        shadowUrl: require("../assets/friend.png"),
+      }),
       position: {},
       address: "",
       tileProvider: {
@@ -154,8 +160,10 @@ export default {
       isPlacing: false,
     };
   },
-  mounted() {
+  created() {
     this.getUserPosition();
+  },
+  mounted() {
     this.$refs.map.mapObject.on("geosearch/showlocation", this.onSearch);
   },
   watch: {
@@ -185,11 +193,13 @@ export default {
       return `<strong>You are here</strong>`;
     },
     getUserCircle() {
+      const { lat, lng } = this.userLocation;
       const circle = {
-        center: [28.566547327321654, 77.38246147950397],
+        center: [lat, lng],
         radius: 450,
         color: "red",
       };
+      console.log(circle);
       return circle;
     },
   },
