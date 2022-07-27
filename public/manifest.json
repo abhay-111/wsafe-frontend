@@ -1,7 +1,7 @@
 {
     "name": "Wsafe",
     "short_name": "Wsafe",
-    "theme_color": "#4DBA87",
+    "theme_color": "#4DBA97",
     "icons": [
       {
         "src": "./img/icons/W-safe.png",
