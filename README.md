@@ -11,7 +11,7 @@
 <br/>
 <p align="center">
   <img src="Project_snapshots/dashboard.PNG">
-  <img src="Project_snapshots/Lighthouse_stats.PNG">
+  <img src="Project_snapshots/WsafePWA.PNG">
 </p>
 <b>
   W-Safe is a web application that helps you navigate your
