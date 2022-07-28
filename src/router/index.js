@@ -6,10 +6,12 @@ Vue.use(VueRouter);
 
 const routes = [
   {
+    name: "Home",
     component: HomeView,
     path: "/",
   },
   {
+    name: "Dashboard",
     component: DashboardView,
     path: "/dashboard",
   },

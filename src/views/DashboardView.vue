@@ -290,6 +290,7 @@ import MapComponent from "../components/MapView.vue";
 import getAllMarkers from "../components/AllMarkers.vue";
 import yourFriends from "../components/YourFriends.vue";
 export default {
+  name: "Dashboard",
   components: {
     MapComponent,
     getAllMarkers,
