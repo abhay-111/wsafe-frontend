@@ -14,7 +14,7 @@
   <img src="Project_snapshots/WsafePWA.PNG">
 </p>
 <b>
-  W-Safe is a web application that helps you navigate your
+  W-Safe is a Progressive Web Application that helps you navigate your
                   neighbourhood that you might be visiting in the near future.
                   It helps the community to make a better decision about the
                   places one might travel.
@@ -72,6 +72,16 @@ Password    :admin123
 <p align="center">
   <img src="Project_snapshots/yourmarkers.PNG">
 </p>
+
+ ### PWA Snapshots ### 
+<div style="display:flex;flex-direction:row;gap:30px">
+  <img style="height:500px;" src="Project_snapshots/PWA6.jpg">
+  <img style="height:500px;" src="Project_snapshots/PWA5.jpg">
+  <img style="height:500px;" src="Project_snapshots/PWA4.jpg">
+  <img style="height:500px;" src="Project_snapshots/PWA3.jpg">
+  <img style="height:500px;" src="Project_snapshots/PWA2.jpg">
+  <img style="height:500px;" src="Project_snapshots/PWA1.jpg">
+</div>
 
 ## Project setup
 ```
