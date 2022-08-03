@@ -289,6 +289,7 @@ import Cookie from "js-cookie";
 import MapComponent from "../components/MapView.vue";
 import getAllMarkers from "../components/AllMarkers.vue";
 import yourFriends from "../components/YourFriends.vue";
+import Pusher from "pusher-js";
 export default {
   name: "Dashboard",
   components: {
@@ -301,6 +302,21 @@ export default {
       this.$router.push("/");
       return;
     }
+    Pusher.logToConsole = true;
+
+    var pusher = new Pusher("bdef54def6986d3e5f5a", {
+      cluster: "ap2",
+    });
+
+    var channel = pusher.subscribe("my-channel");
+    const context = this;
+    channel.bind("my-event", function (data) {
+      console.log(data, Cookie.get("userId"));
+      if (data.data.recieverId == Cookie.get("userId")) {
+        context.friendRequests.push(data.data);
+      }
+    });
+
     this.userData.name = Cookie.get("name");
     this.userData.email = Cookie.get("email");
     this.$store
@@ -310,7 +326,7 @@ export default {
       })
       .then(() => {
         this.$store.dispatch("getAllFreindRequests").then((data) => {
-          this.friendRequests = data.data.data;
+          this.friendRequests = data.data.data || [];
         });
       })
       .then(() => {
