@@ -3,8 +3,8 @@ import Vuex from "vuex";
 import axios from "axios";
 import Cookie from "js-cookie";
 Vue.use(Vuex);
-// const BASE_URL = "http://localhost:8000/";
-const BASE_URL = "https://intense-savannah-60242.herokuapp.com/";
+const BASE_URL = "https://wsafeb.onrender.com/";
+// const BASE_URL = "https://intense-savannah-60242.herokuapp.com/";
 export default new Vuex.Store({
   state: {},
   mutations: {},
