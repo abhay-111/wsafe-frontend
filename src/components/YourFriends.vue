@@ -120,7 +120,7 @@ export default {
       // Lazily load input items
       axios
         .get(
-          `https://intense-savannah-60242.herokuapp.com/user/getUsers/${Cookie.get(
+          `https://wsafeb.onrender.com/user/getUsers/${Cookie.get(
             "userId"
           )}`
         )
